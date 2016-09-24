@@ -9,3 +9,5 @@ To commit changes and push:
 git commit -m "<message>"
 git push <remotename> <branchname> 
 - remote name should be origin and branch name should be whatever branch your committing to
+
+Will attempt merge 
