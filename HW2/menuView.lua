@@ -7,9 +7,11 @@ local widget = require("widget")
 _W = display.contentWidth
 _H = display.contentHeight
 
+-- These variables are mainly used to propagate the values from the settings over to the gameView
 local minTime = 500
 local maxTime = 5000
 
+-- Start Button click event
 local function startButtonClicked ( event )
 	if(event.phase == "ended") then
 		print("clicked")
@@ -18,6 +20,7 @@ local function startButtonClicked ( event )
 		composer.gotoScene( "gameView");
 	end
 end
+-- Settings button click event
 local function settingsButtonClicked ( event )
 	if(event.phase == "ended") then
 		print("Settingsclicked")

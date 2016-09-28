@@ -34,9 +34,11 @@ scoreGroup.anchorY = 0
 
 -- Event handler for box
 function boxTapped (object, event)
+	-- Stops the timer that waits 2 seconds before going to the next round.
 	timer.cancel( visibleTimer )
+	-- Calculates response time
 	stopTime = system.getTimer() - startTime
-	print("Response Time: " .. stopTime .. " ms")
+	-- Checks if object is blue, if not does not count response time
 	if(object.isCorrectColor) then
 		correctCount = correctCount + 1
 		responseTimeTable[correctCount] = stopTime
@@ -73,7 +75,9 @@ function boxTapped (object, event)
 		timer.performWithDelay( 2000, function () 
 
 			scoreGroup.y = 0
-			composer.showOverlay( "pauseOverlay",  options )
+			composer.removeScene("gameView")
+		
+			composer.gotoScene( "menuView");
 		end)
 	end
 end
@@ -115,6 +119,7 @@ scoreGroup:insert(numIncorrectlabel)
 scoreGroup:insert(label3)
 scoreGroup:insert(avgTimeLabel)
 
+-- Prepares game by putting all variables and tables to their initial values
 function scene:prepareGame()
 	-- The following resets each variable and label to its initial values
 	correctCount = 0
@@ -143,12 +148,14 @@ function scene:prepareGame()
 	4)
 end
 
+-- Begins the pause between each round
 function startPause()
 	local pauseTime = math.random(minPauseTime, maxPauseTime)
 	print("Pause Time: " .. pauseTime .. " ms")
 	timer.performWithDelay(pauseTime, configureBox)
 end
 
+-- Sets up the box in terms of what color it should be next round
 function configureBox()
 	-- Decides which color to give the box. Of course if red is chosen then set the isCorrectColor variable to false
 	local isBlue = math.random(0,1)
@@ -170,7 +177,15 @@ function configureBox()
 				print("Round: " .. numOfRounds)
 				startPause()
 			else
-				composer.showOverlay( "pauseOverlay",  options )
+				scoreGroup.y = _H/2
+				scoreGroup:toFront()
+				timer.performWithDelay( 2000, function () 
+
+				scoreGroup.y = 0
+				composer.removeScene("gameView")
+		
+				composer.gotoScene( "menuView");
+				end)
 			end
 		end
 		)
@@ -189,7 +204,7 @@ end
 
 function scene:show(event)
 	local sceneGroup = self.view
-
+	sceneGroup:insert(scoreGroup)
 	local phase = event.phase
 	if(phase == "will") then
 	--	if(composer.getVariable("minPauseTime") !== nil) then

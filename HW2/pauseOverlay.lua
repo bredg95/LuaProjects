@@ -7,9 +7,10 @@ local widget = require("widget")
 _W = display.contentWidth
 _H = display.contentHeight
 
+-- Button click event for the ready button
 local function readyButtonClicked ( event )
 	if(event.phase == "ended") then
-		print("clicked")
+		-- Hides "Im ready" overlay
 		composer.hideOverlay("fade", 500)
 	end
 end
