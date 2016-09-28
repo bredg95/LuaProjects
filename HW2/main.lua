@@ -9,4 +9,5 @@
 -----------------------------------------------------------------------------------------
 
 local composer = require("composer");
-composer.gotoScene( "gameView");
+--composer.gotoScene( "gameView");
+composer.gotoScene( "menuView");

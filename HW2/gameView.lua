@@ -192,7 +192,16 @@ function scene:show(event)
 
 	local phase = event.phase
 	if(phase == "will") then
-		
+	--	if(composer.getVariable("minPauseTime") !== nil) then
+		minPauseTime = composer.getVariable("minPauseTime");
+		--end
+		print("minPauseTime: " .. minPauseTime)
+
+		--if(composer.getVariable("maxPauseTime") != nil) then
+		maxPauseTime = composer.getVariable("maxPauseTime");
+		--end
+
+		print("maxPauseTime: " .. maxPauseTime)
 	elseif(phase == "did") then
 		
 	end
