@@ -45,7 +45,7 @@ alexSheet = graphics.newImageSheet( "alex.png", options );
 alexSeqData = { 
 	{name = "alex_normal", start=1 , count = 4, time = 800}, 
 	{name = "alex_faster", frames={1,2,3,4}, time = 400}, 
-	{name = "alex_shake", frames={5,6}, time = 500}, 
+	{name = "alex_shake", frames={6,5}, time = 500}, 
 	{name = "alex_rock", frames={7}}, 
 	{name = "alex_paper", frames={9}}, 
 	{name = "alex_scissor", frames={8}}, 

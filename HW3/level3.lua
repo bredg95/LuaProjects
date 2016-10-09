@@ -17,7 +17,7 @@ local _H = display.contentHeight
  local bubble = display.newSprite (alexSheet, bubbleSeqData); 
  local janken = display.newSprite (jankenSheet, seqDataJanken);
  -- The x and y position are tailored to the boss sprite
-   hand = display.newImage (jankenSheet, 4, -- boss_rock
+  local hand = display.newImage (jankenSheet, math.random(4,6), -- boss_rock
    display.contentCenterX+41,
    display.contentCenterY+42);
   -- Next Button click event
@@ -46,7 +46,7 @@ end
       bubble.tap = toggleOptions
       bubble:addEventListener("tap",toggleOptions)
 
-      alex:setSequence ("shake");
+      alex:setSequence ("alex_shake");
       alex:play();
 
       janken:setSequence("boss_shake");
@@ -102,7 +102,6 @@ function scene:create( event )
    alex.y = display.contentCenterY+66; 
    alex.anchorX = 0; 
    alex.anchorY = 1; 
-   alex:setSequence("alex_shake");
    
 
    bubble.x = display.contentCenterX-90; 

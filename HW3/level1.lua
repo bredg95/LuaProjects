@@ -46,7 +46,7 @@ local nextButton = widget.newButton(
 		bubble.tap = toggleOptions
 		bubble:addEventListener("tap",toggleOptions)
 
-		alex:setSequence ("shake");
+		alex:setSequence ("alex_shake");
 		alex:play();
 
 		janken:setSequence("enemy1_shake");
@@ -97,7 +97,6 @@ function scene:create( event )
 	alex.y = display.contentCenterY+66; 
 	alex.anchorX = 0; 
 	alex.anchorY = 1; 
-	alex:setSequence("alex_shake");
 	
 
 	bubble.x = display.contentCenterX-90; 
@@ -135,7 +134,7 @@ function scene:show( event )
 	  	-- Example: start timers, begin animation, play audio, etc.
 	  	nextButton.isVisible = false;
 	  	hand.isVisible = false;
-	  	alex:play();
+	  	--alex:play();
 	 	play();	
 		--Shake for a while before revealing the hand
 		local t = timer.performWithDelay (3000, shoot, 1);
