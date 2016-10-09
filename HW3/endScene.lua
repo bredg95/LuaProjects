@@ -2,21 +2,47 @@
 
 local composer = require( "composer" )
 local scene = composer.newScene()
+local widget = require("widget")
  
+local _W = display.contentWidth
+local _H = display.contentHeight
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
  
 -- local forward references should go here
- 
+ -- Start Button click event
+local function returnButtonClicked ( event )
+	if(event.phase == "ended") then
+		print("clicked")
+		composer.removeScene("endScene")
+		composer.gotoScene( "startScene");
+	end
+end
+
+local returnButton = widget.newButton( 
+		{
+			x = _W/2,
+			y = _H/2,
+			id = "returnButton",
+			label = "Return to Menu",
+			labelColor = {default ={1,1,1}, over = {0,0,0}},
+			textOnly = false,
+			shape = "roundedRect",
+			fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+			onEvent = returnButtonClicked
+
+		} )
+local winningMessage = display.newText( "Congratulations Kidd!", _W/2, 0, native.systemFont , 10 )
 ---------------------------------------------------------------------------------
  
 -- "scene:create()"
 function scene:create( event )
  
    local sceneGroup = self.view
- 
+   sceneGroup:insert(returnButton)
+   sceneGroup:insert(winningMessage)
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end

@@ -2,8 +2,10 @@
 
 local composer = require( "composer" )
 local scene = composer.newScene()
+local widget = require("widget")
 local frameData = require("frameData")
- 
+local _W = display.contentWidth
+local _H = display.contentHeight
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -13,6 +15,32 @@ local frameData = require("frameData")
  local bg = display.newImage (bgSheet, 1);
  local bubble = display.newSprite (alexSheet, bubbleSeqData); 
  local janken = display.newSprite (jankenSheet, seqDataJanken);
+ -- This x and y layout should work for the two enemies before the boss
+local hand = display.newImage (jankenSheet, math.random(10,12),
+	display.contentCenterX+57,
+	display.contentCenterY+50);
+ -- Next Button click event
+local function nextButtonClicked ( event ) 
+	if(event.phase == "ended") then
+	-- Code for going to either the next level or the main menu if user lost
+		composer.removeScene("level1")
+		composer.gotoScene( "level2");
+	end
+end
+
+local nextButton = widget.newButton( 
+		{
+			x = _W/2,
+			y = _H/2,
+			id = "nextButton",
+			label = "Next Level",
+			labelColor = {default ={1,1,1}, over = {0,0,0}},
+			textOnly = false,
+			shape = "roundedRect",
+			fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+			onEvent = nextButtonClicked
+
+		} )
  local function play ()
 	
 		bubble.tap = toggleOptions
@@ -27,36 +55,32 @@ end
 
 local function shoot ()
 
-	--janken:setSequence("boss_set");
-	--hand = display.newImage (jankenSheet, 4, -- boss_rock
-	janken:setSequence("enemy1_set");
-	--hand = display.newImage (jankenSheet, 4, -- boss_rock
-	-- This x and y layout should work for the two enemies before the boss
-	hand = display.newImage (jankenSheet,math.random(10,12), -- boss_rock
-	display.contentCenterX+57,
-	display.contentCenterY+50);
-	
-	-- The x and y position are tailored to the boss sprite
-	-- hand = display.newImage (jankenSheet, 4, -- boss_rock
-	-- display.contentCenterX+41,
-	-- display.contentCenterY+42);
 
+	janken:setSequence("enemy1_set");
+	hand.isVisible = true;
 	if(toggleCounter   == 0) then
-		alex:setSequence("alex_scissor");
+		alex:setSequence("alex_rock");
 		print("alex_rock")
 		print(toggleCounter)
 	end
 	if(toggleCounter  == 1) then
-		alex:setSequence("alex_rock");
+		alex:setSequence("alex_paper");
 		print("alex_paper")
 		print(toggleCounter)
 	end
 	if(toggleCounter  == 2) then
-		alex:setSequence("alex_paper");
+		alex:setSequence("alex_scissor");
 		print("alex_scissor")
 		print(toggleCounter)
 	end
-	--alex:setSequence("alex_paper"); -- just show rock for now
+	
+	-- Add code for determining who won the current round or if it led to a tie
+
+	-- If level is complete, determine if user needs to go back to main menu or continue to the next level
+
+	-- reset toggle counter
+	toggleCounter = 0;
+	nextButton.isVisible = true;
 
 end
 ---------------------------------------------------------------------------------
@@ -92,6 +116,8 @@ function scene:create( event )
    	sceneGroup:insert(alex )
    	sceneGroup:insert(bubble)
    	sceneGroup:insert(janken)
+   	sceneGroup:insert(nextButton)
+   	sceneGroup:insert(hand)
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
  
@@ -107,6 +133,8 @@ function scene:show( event )
 	  	-- Called when the scene is now on screen.
 	  	-- Insert code here to make the scene come alive.
 	  	-- Example: start timers, begin animation, play audio, etc.
+	  	nextButton.isVisible = false;
+	  	hand.isVisible = false;
 	  	alex:play();
 	 	play();	
 		--Shake for a while before revealing the hand

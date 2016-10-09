@@ -2,6 +2,10 @@
 
 local composer = require( "composer" )
 local scene = composer.newScene()
+local widget = require('widget')
+
+local _W = display.contentWidth
+local _H = display.contentHeight
  
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -9,7 +13,30 @@ local scene = composer.newScene()
 ---------------------------------------------------------------------------------
  
 -- local forward references should go here
- 
+local gameTitle = display.newText(  "Alex Kidd Janken", _W/2, 0, native.systemFont, 15 )
+local namesTitle = display.newText(  "Branden Guevara\nGarrett Eledui", _W/2, 40, native.systemFont, 15 )
+-- Start Button click event
+local function startButtonClicked ( event )
+	if(event.phase == "ended") then
+		print("clicked")
+		composer.removeScene("startScene")
+		composer.gotoScene( "level1");
+	end
+end
+
+local startButton = widget.newButton( 
+		{
+			x = _W/2,
+			y = _H/2,
+			id = "startButton",
+			label = "Start Game",
+			labelColor = {default ={1,1,1}, over = {0,0,0}},
+			textOnly = false,
+			shape = "roundedRect",
+			fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+			onEvent = startButtonClicked
+
+		} )
 ---------------------------------------------------------------------------------
  
 -- "scene:create()"
@@ -19,6 +46,9 @@ function scene:create( event )
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+   sceneGroup:insert(gameTitle)
+   sceneGroup:insert(namesTitle)
+   sceneGroup:insert(startButton)
 end
  
 -- "scene:show()"

@@ -8,4 +8,4 @@
 
 display.setStatusBar( display.HiddenStatusBar )
 local composer = require("composer");
-composer.gotoScene( "level1");
+composer.gotoScene( "startScene");

@@ -74,10 +74,10 @@ bubbleSeqData = {
 -- bubble.xScale = 1.2
 -- bubble.yScale = 1.2
 
-toggleCounter = 1
+toggleCounter = 0
 
 function toggleOptions( event )
-
+	toggleCounter = (toggleCounter + 1) % 3;
 	if(toggleCounter == 0) then
 		event.target:setSequence("bubble_rock");
 		print("bubble_rock")
@@ -92,10 +92,8 @@ function toggleOptions( event )
 		event.target:setSequence("bubble_scissor");
 		print("bubble_scissor")
 		print(toggleCounter)
-		toggleCounter = 0
 		return
-	end	
-	toggleCounter = toggleCounter + 1;
+	end		
 end
 
 ---------- JANKEN ---------------------------------
