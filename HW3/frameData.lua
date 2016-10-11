@@ -3,7 +3,7 @@
 local widget = require('widget')
 
  -----------------------------background--------------------------------
-   local options =
+   local bgOptions =
    {
       frames = {
          { x = 0, y = 0, width = 256, height = 192}, --bg1
@@ -13,15 +13,23 @@ local widget = require('widget')
       }
    };
    -- Background sheet is global
-   bgSheet = graphics.newImageSheet( "bg.png", options );
+   bgSheet = graphics.newImageSheet( "bg.png", bgOptions );
    -- local bg = display.newImage (sheet, 1);
    -- bg.x = display.contentWidth / 2;
    -- bg.y= display.contentHeight / 2;
 
+-- Title Screen
+local tsOptions = 
+{
+	frames = {
+		{x = 0, y = 0, width = 148, height = 94}
+	}
+}
+tsSheet = graphics.newImageSheet("titlescreen.png", tsOptions);
 
 
 ---------- ALEX KIDD ---------------------------------
-local options =
+local alexOptions =
 {
 	frames = {
 		{ x = 1, y = 2, width = 16, height = 25}, --frame 1
@@ -36,10 +44,13 @@ local options =
 		{ x = 1, y = 79, width= 32, height= 32}, -- bubblerock
 		{ x = 35, y = 79, width= 32, height= 32}, -- bubblescissor
 		{ x = 69, y = 79, width= 32, height= 32}, -- bubblepaper
+		{ x = 0, y = 281, width = 33, height = 46},
+		{ x = 34, y = 281, width = 33, height = 46 },
+		{x = 0, y = 240, width = 26, height = 34}
 	}
 };
 -- Alex sprite sheet is global
-alexSheet = graphics.newImageSheet( "alex.png", options );
+alexSheet = graphics.newImageSheet( "alex.png", alexOptions );
 
 -- Create animation sequence for animation 
 alexSeqData = { 
@@ -49,7 +60,8 @@ alexSeqData = {
 	{name = "alex_rock", frames={7}}, 
 	{name = "alex_paper", frames={9}}, 
 	{name = "alex_scissor", frames={8}}, 
-	
+	{name = "alex_eating", frames = {13,14}, time = 500},
+	{name = "alex_jail", frames = {15}}
 } 
 -- alex = display.newSprite (alexSheet, seqData); 
 -- alex.x = display.contentCenterX-80; 

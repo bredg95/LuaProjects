@@ -3,6 +3,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require("widget")
+local frameData = require('frameData')
  
 local _W = display.contentWidth
 local _H = display.contentHeight
@@ -43,6 +44,16 @@ function scene:create( event )
    local sceneGroup = self.view
    sceneGroup:insert(returnButton)
    sceneGroup:insert(winningMessage)
+   alex = display.newSprite( alexSheet, alexSeqData );
+   alex.x = _W/2
+   alex.y = 3*_H/4 + 40
+   local i = math.random(0,1)
+   if(i == 0) then
+   	alex:setSequence( "alex_eating" )
+   else
+   	alex:setSequence( "alex_jail" )
+   end
+   sceneGroup:insert(alex)
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
@@ -59,6 +70,8 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
+      
+      alex:play();
    end
 end
  

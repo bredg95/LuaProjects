@@ -3,6 +3,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require('widget')
+local frameData = require('frameData')
 
 local _W = display.contentWidth
 local _H = display.contentHeight
@@ -13,8 +14,8 @@ local _H = display.contentHeight
 ---------------------------------------------------------------------------------
  
 -- local forward references should go here
-local gameTitle = display.newText(  "Alex Kidd Janken", _W/2, 0, native.systemFont, 15 )
-local namesTitle = display.newText(  "Branden Guevara\nGarrett Eledui", _W/2, 40, native.systemFont, 15 )
+local gameTitle = display.newImage(tsSheet, 1, _W/2, -25 ) --(  "Alex Kidd Janken", _W/2, 0, native.systemFont, 15 )
+local namesTitle = display.newText(  "By: Branden Guevara\nGarrett Eledui", _W/2, 3*_H/4 + 40, native.systemFont, 15 )
 -- Start Button click event
 local function startButtonClicked ( event )
 	if(event.phase == "ended") then
@@ -27,7 +28,7 @@ end
 local startButton = widget.newButton( 
 		{
 			x = _W/2,
-			y = _H/2,
+			y = _H/2 - 10,
 			id = "startButton",
 			label = "Start Game",
 			labelColor = {default ={1,1,1}, over = {0,0,0}},
