@@ -16,24 +16,39 @@ local _H = display.contentHeight
  local bubble = display.newSprite (alexSheet, bubbleSeqData); 
  local janken = display.newSprite (jankenSheet, seqDataJanken);
  -- This x and y layout should work for the two enemies before the boss
-local hand = display.newImage (jankenSheet, math.random(10,12),
+ local isClicked = false
+local alexWins = 0
+local jankenWins = 0
+local roundCounter = 1
+local jankenHandSelection = math.random(10,12)
+print("jenkenHandSelection init:",jankenHandSelection)
+local hand = display.newImage (jankenSheet, jankenHandSelection,
 	display.contentCenterX+57,
 	display.contentCenterY+50);
  -- Next Button click event
 local function nextButtonClicked ( event ) 
 	if(event.phase == "ended") then
 	-- Code for going to either the next level or the main menu if user lost
+		isClicked = true
 		composer.removeScene("level1")
 		composer.gotoScene( "level2");
 	end
 end
+local function playAgainButtonClicked ( event ) 
+	if(event.phase == "ended") then
+		print("playAgainButtonClicked")
+		--play();
+		composer.gotoScene( "level1");
+	end
+end
+
 
 local nextButton = widget.newButton( 
 		{
 			x = _W/2,
 			y = _H/2,
 			id = "nextButton",
-			label = "Next Level",
+			label = "Go to Level 2",
 			labelColor = {default ={1,1,1}, over = {0,0,0}},
 			textOnly = false,
 			shape = "roundedRect",
@@ -41,8 +56,37 @@ local nextButton = widget.newButton(
 			onEvent = nextButtonClicked
 
 		} )
+local playAgainButton = widget.newButton( 
+		{
+			x = _W/2,
+			y = _H/2,
+			id = "playAgainButton",
+			label = "Play Again",
+			labelColor = {default ={1,1,1}, over = {0,0,0}},
+			textOnly = false,
+			shape = "roundedRect",
+			fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+			onEvent = playAgainButtonClicked
+
+		} )
  local function play ()
-	
+
+		playAgainButton.isVisible = false;
+
+		--if(roundCounter > 3) then  might need a case for this
+
+		if(alexWins == 2) then
+			--Print level 1 win message
+			nextButton.isVisible = true
+			return
+		elseif(jankenWins == 2) then
+			composer.gotoScene( "endScene"); --print game over message
+		end
+		
+
+
+ 		--nextButton.isVisible = true; -- only for debugging
+
 		bubble.tap = toggleOptions
 		bubble:addEventListener("tap",toggleOptions)
 
@@ -78,9 +122,70 @@ local function shoot ()
 
 	-- If level is complete, determine if user needs to go back to main menu or continue to the next level
 
+
+
+	print("toggleCounter: ",toggleCounter)
+	print("jankenHandSelection: ", jankenHandSelection)
+	if(toggleCounter == 0 and jankenHandSelection == 10) then
+		--tie
+		print("tie")
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 1 and jankenHandSelection == 12) then
+		--tie
+		print("tie")
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 2 and jankenHandSelection == 11) then
+		--tie
+		print("tie")
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 0 and jankenHandSelection == 11) then
+		--alex: rock 	 janken:  scissor
+		--alex wins
+		alexWins = alexWins + 1
+		print("alex wins")
+		roundCounter = roundCounter + 1
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 0 and jankenHandSelection == 12) then
+		-- alex: rock 	 janken: paper
+		-- janken wins
+		jankenWins = jankenWins + 1
+		print("janken wins")
+		roundCounter = roundCounter + 1
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 1 and jankenHandSelection == 10) then
+		-- alex: paper 	 janken: rock
+		-- alex wins
+		alexWins = alexWins + 1
+		print("alex wins")
+		roundCounter = roundCounter + 1
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 1 and jankenHandSelection == 11) then
+		--alex: paper    janken: scissors
+		--janken wins
+		jankenWins = jankenWins + 1
+		print("janken wins")
+		roundCounter = roundCounter + 1
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 2 and jankenHandSelection == 10) then
+		--alex: scissors  janken: rock
+		-- janken wins
+		jankenWins = jankenWins + 1
+		print("janken wins")
+		roundCounter = roundCounter + 1
+		playAgainButton.isVisible = true;
+	elseif(toggleCounter == 2 and jankenHandSelection == 12) then
+		--alex: scissors  janken: paper
+		--alex wins
+		alexWins = alexWins + 1
+		print("alex wins")
+		roundCounter = roundCounter + 1
+		playAgainButton.isVisible = true;
+	end
+
 	-- reset toggle counter
 	toggleCounter = 0;
-	nextButton.isVisible = true;
+
+	--nextButton.isVisible = true;
 
 end
 ---------------------------------------------------------------------------------
@@ -116,6 +221,7 @@ function scene:create( event )
    	sceneGroup:insert(bubble)
    	sceneGroup:insert(janken)
    	sceneGroup:insert(nextButton)
+   	sceneGroup:insert(playAgainButton)
    	sceneGroup:insert(hand)
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end

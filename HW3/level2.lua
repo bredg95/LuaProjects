@@ -17,7 +17,9 @@ local _H = display.contentHeight
  local bubble = display.newSprite (alexSheet, bubbleSeqData); 
  local janken = display.newSprite (jankenSheet, seqDataJanken);
  -- This x and y layout should work for the two enemies before the boss
-local hand = display.newImage (jankenSheet,math.random(16,18), 
+
+local jankenHandSelection = math.random(16,18)
+local hand = display.newImage (jankenSheet, jankenHandSelection, 
    display.contentCenterX+57,
    display.contentCenterY+50);
  -- Next Button click event
@@ -33,7 +35,7 @@ end
          x = _W/2,
          y = _H/2,
          id = "nextButton",
-         label = "Next Level",
+         label = "Go to Level 3",
          labelColor = {default ={1,1,1}, over = {0,0,0}},
          textOnly = false,
          shape = "roundedRect",
@@ -43,6 +45,8 @@ end
       } )
  local function play ()
    
+      --nextButton.isVisible = true; -- only for debugging
+
       bubble.tap = toggleOptions
       bubble:addEventListener("tap",toggleOptions)
 
@@ -80,6 +84,44 @@ local function shoot ()
    -- Add code for determining who won the current round or if it led to a tie
 
    -- If level is complete, determine if user needs to go back to main menu or continue to the next level
+
+
+
+   if(toggleCounter == 0 and jankenHandSelection == 16) then
+      --tie
+      print("tie")
+   elseif(toggleCounter == 1 and jankenHandSelection == 18) then
+      --tie
+      print("tie")
+   elseif(toggleCounter == 2 and jankenHandSelection == 17) then
+      --tie
+      print("tie")
+   elseif(toggleCounter == 0 and jankenHandSelection == 17) then
+      --alex: rock    janken:  scissor
+      --alex wins
+      print("alex wins")
+   elseif(toggleCounter == 0 and jankenHandSelection == 18) then
+      -- alex: rock   janken: paper
+      -- janken wins
+      print("janken wins")
+   elseif(toggleCounter == 1 and jankenHandSelection == 16) then
+      -- alex: paper     janken: rock
+      -- alex wins
+      print("alex wins")
+   elseif(toggleCounter == 1 and jankenHandSelection == 17) then
+      --alex: paper    janken: scissors
+      --janken wins
+      print("janken wins")
+   elseif(toggleCounter == 2 and jankenHandSelection == 16) then
+      --alex: scissors  janken: rock
+      -- janken wins
+      print("janken wins")
+   elseif(toggleCounter == 2 and jankenHandSelection == 18) then
+      --alex: scissors  janken: paper
+      --alex wins
+      print("alex wins")
+   end
+
 
    -- reset toggle counter
    toggleCounter = 0;
