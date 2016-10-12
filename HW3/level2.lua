@@ -12,12 +12,18 @@ local _H = display.contentHeight
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
  
+local scoreBoardTitle = display.newText( "", 60, 200, native.systemFont, 12 )
+
+
 -- local forward references should go here
   local bg = display.newImage (bgSheet, 3);
  local bubble = display.newSprite (alexSheet, bubbleSeqData); 
  local janken = display.newSprite (jankenSheet, seqDataJanken);
  -- This x and y layout should work for the two enemies before the boss
-
+local isClicked = false
+local alexWins = 0
+local jankenWins = 0
+local roundCounter = 1
 local jankenHandSelection = math.random(16,18)
 local hand = display.newImage (jankenSheet, jankenHandSelection, 
    display.contentCenterX+57,
@@ -28,6 +34,14 @@ local function nextButtonClicked ( event )
    -- Code for going to either the next level or the main menu if user lost
       composer.removeScene("level2")
       composer.gotoScene( "level3");
+      timer:removeSelf();
+   end
+end
+local function playAgainButtonClicked ( event ) 
+   if(event.phase == "ended") then
+      print("playAgainButtonClicked")
+      --play();
+      composer.gotoScene( "level2");
    end
 end
  local nextButton = widget.newButton( 
@@ -43,9 +57,45 @@ end
          onEvent = nextButtonClicked
 
       } )
+ local playAgainButton = widget.newButton( 
+      {
+         x = _W/2,
+         y = _H/2,
+         id = "playAgainButton",
+         label = "Play Again",
+         labelColor = {default ={1,1,1}, over = {0,0,0}},
+         textOnly = false,
+         shape = "roundedRect",
+         fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+         onEvent = playAgainButtonClicked
+
+      } )
  local function play ()
    
       --nextButton.isVisible = true; -- only for debugging
+
+      playAgainButton.isVisible = false;
+
+
+      scoreBoardTitle:removeSelf()
+      scoreBoardTitle = display.newText( "Alex: "..alexWins.. "     Janken: "..jankenWins, 60, 200, native.systemFont, 12 )
+      scoreBoardTitle:setFillColor( 1, 1, 1 )
+
+      if(alexWins == 2) then
+         --Print level 2 win message
+         nextButton.isVisible = true
+         return
+      elseif(jankenWins == 2) then
+         composer.gotoScene( "endScene"); --print game over message
+         scoreBoardTitle:removeSelf()
+         timer:removeSelf();
+      end
+
+
+      
+
+
+
 
       bubble.tap = toggleOptions
       bubble:addEventListener("tap",toggleOptions)
@@ -86,46 +136,69 @@ local function shoot ()
    -- If level is complete, determine if user needs to go back to main menu or continue to the next level
 
 
-
+   print("toggleCounter: ",toggleCounter)
+   print("jankenHandSelection: ", jankenHandSelection)
    if(toggleCounter == 0 and jankenHandSelection == 16) then
       --tie
       print("tie")
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 1 and jankenHandSelection == 18) then
       --tie
       print("tie")
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 2 and jankenHandSelection == 17) then
       --tie
       print("tie")
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 0 and jankenHandSelection == 17) then
       --alex: rock    janken:  scissor
       --alex wins
+      alexWins = alexWins + 1
       print("alex wins")
+      roundCounter = roundCounter + 1
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 0 and jankenHandSelection == 18) then
       -- alex: rock   janken: paper
       -- janken wins
+      jankenWins = jankenWins + 1
       print("janken wins")
+      roundCounter = roundCounter + 1
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 1 and jankenHandSelection == 16) then
       -- alex: paper     janken: rock
       -- alex wins
+      alexWins = alexWins + 1
       print("alex wins")
+      roundCounter = roundCounter + 1
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 1 and jankenHandSelection == 17) then
       --alex: paper    janken: scissors
       --janken wins
+      jankenWins = jankenWins + 1
       print("janken wins")
+      roundCounter = roundCounter + 1
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 2 and jankenHandSelection == 16) then
       --alex: scissors  janken: rock
       -- janken wins
+      jankenWins = jankenWins + 1
       print("janken wins")
+      roundCounter = roundCounter + 1
+      playAgainButton.isVisible = true;
    elseif(toggleCounter == 2 and jankenHandSelection == 18) then
       --alex: scissors  janken: paper
       --alex wins
+      alexWins = alexWins + 1
       print("alex wins")
+      roundCounter = roundCounter + 1
+      playAgainButton.isVisible = true;
    end
+
 
 
    -- reset toggle counter
    toggleCounter = 0;
-   nextButton.isVisible = true;
+   --nextButton.isVisible = true;
 
 end
 ---------------------------------------------------------------------------------

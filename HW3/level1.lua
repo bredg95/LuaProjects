@@ -10,7 +10,10 @@ local _H = display.contentHeight
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
- 
+
+local scoreBoardTitle = display.newText( "", 60, 200, native.systemFont, 12 )
+local t = timer.performWithDelay (3000, nil, 1); 
+
 -- local forward references should go here
  local bg = display.newImage (bgSheet, 1);
  local bubble = display.newSprite (alexSheet, bubbleSeqData); 
@@ -32,6 +35,8 @@ local function nextButtonClicked ( event )
 		isClicked = true
 		composer.removeScene("level1")
 		composer.gotoScene( "level2");
+		scoreBoardTitle:removeSelf();
+		--timer.stop();
 	end
 end
 local function playAgainButtonClicked ( event ) 
@@ -41,6 +46,7 @@ local function playAgainButtonClicked ( event )
 		composer.gotoScene( "level1");
 	end
 end
+
 
 
 local nextButton = widget.newButton( 
@@ -75,15 +81,22 @@ local playAgainButton = widget.newButton(
 
 		--if(roundCounter > 3) then  might need a case for this
 
+		scoreBoardTitle:removeSelf()
+	    scoreBoardTitle = display.newText( "Alex: "..alexWins.. "		Janken: "..jankenWins, 60, 200, native.systemFont, 12 )
+		scoreBoardTitle:setFillColor( 1, 1, 1 )
+
+
 		if(alexWins == 2) then
 			--Print level 1 win message
 			nextButton.isVisible = true
 			return
 		elseif(jankenWins == 2) then
 			composer.gotoScene( "endScene"); --print game over message
+			scoreBoardTitle:removeSelf()
+			timer:removeSelf();
 		end
 		
-
+		
 
  		--nextButton.isVisible = true; -- only for debugging
 
@@ -223,6 +236,7 @@ function scene:create( event )
    	sceneGroup:insert(nextButton)
    	sceneGroup:insert(playAgainButton)
    	sceneGroup:insert(hand)
+   	--sceneGroup:insert()
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
  
@@ -242,8 +256,9 @@ function scene:show( event )
 	  	hand.isVisible = false;
 	  	--alex:play();
 	 	play();	
-		--Shake for a while before revealing the hand
-		local t = timer.performWithDelay (3000, shoot, 1);
+		--Shake for a while before revealing the hand		
+		t = timer.performWithDelay (3000, shoot, 1); 
+		
 
    end
 end
