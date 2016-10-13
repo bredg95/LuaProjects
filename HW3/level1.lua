@@ -81,7 +81,11 @@ local playAgainButton = widget.newButton(
 
 		--if(roundCounter > 3) then  might need a case for this
 
-		scoreBoardTitle:removeSelf()
+		if(scoreBoardTitle ~= nil) then
+			scoreBoardTitle:removeSelf()	
+		end
+		
+
 	    scoreBoardTitle = display.newText( "Alex: "..alexWins.. "		Janken: "..jankenWins, 60, 200, native.systemFont, 12 )
 		scoreBoardTitle:setFillColor( 1, 1, 1 )
 
@@ -93,7 +97,8 @@ local playAgainButton = widget.newButton(
 		elseif(jankenWins == 2) then
 			composer.gotoScene( "endScene"); --print game over message
 			scoreBoardTitle:removeSelf()
-			timer:removeSelf();
+			--timer:removeSelf();
+			--timer.stop();
 		end
 		
 		

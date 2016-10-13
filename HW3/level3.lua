@@ -78,7 +78,10 @@ end
       playAgainButton.isVisible = false;
 
 
-      scoreBoardTitle:removeSelf()
+      if(scoreBoardTitle ~= nil) then
+         scoreBoardTitle:removeSelf()  
+      end
+      
       scoreBoardTitle = display.newText( "Alex: "..alexWins.. "     Janken: "..jankenWins, 60, 200, native.systemFont, 12 )
       scoreBoardTitle:setFillColor( 1, 1, 1 )
 

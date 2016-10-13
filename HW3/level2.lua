@@ -34,7 +34,7 @@ local function nextButtonClicked ( event )
    -- Code for going to either the next level or the main menu if user lost
       composer.removeScene("level2")
       composer.gotoScene( "level3");
-      timer:removeSelf();
+      --timer:removeSelf();
    end
 end
 local function playAgainButtonClicked ( event ) 
@@ -77,7 +77,11 @@ end
       playAgainButton.isVisible = false;
 
 
-      scoreBoardTitle:removeSelf()
+      if(scoreBoardTitle ~= nil) then
+         scoreBoardTitle:removeSelf()  
+      end
+      
+
       scoreBoardTitle = display.newText( "Alex: "..alexWins.. "     Janken: "..jankenWins, 60, 200, native.systemFont, 12 )
       scoreBoardTitle:setFillColor( 1, 1, 1 )
 
@@ -88,7 +92,7 @@ end
       elseif(jankenWins == 2) then
          composer.gotoScene( "endScene"); --print game over message
          scoreBoardTitle:removeSelf()
-         timer:removeSelf();
+         --timer:removeSelf();
       end
 
 
