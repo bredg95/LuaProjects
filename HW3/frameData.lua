@@ -38,9 +38,9 @@ local alexOptions =
 		{ x = 52, y = 2, width = 16, height = 25}, --frame 4
 		{ x = 1, y = 54, width = 16, height = 24}, --ready1
 		{ x = 19, y = 54, width = 16, height = 24}, --ready2
-		{ x = 37, y = 54, width = 29, height = 24}, -- rock
-		{ x = 67, y = 54, width = 33, height = 24}, -- scissor
-		{ x = 101, y = 54, width = 33, height = 24}, -- paper
+		{ x = 37, y = 54, width = 29, height = 24}, -- rock = 0
+		{ x = 67, y = 54, width = 33, height = 24}, -- scissor = 1
+		{ x = 101, y = 54, width = 33, height = 24}, -- paper = 2
 		{ x = 1, y = 79, width= 32, height= 32}, -- bubblerock
 		{ x = 35, y = 79, width= 32, height= 32}, -- bubblescissor
 		{ x = 69, y = 79, width= 32, height= 32}, -- bubblepaper
@@ -96,12 +96,12 @@ function toggleOptions( event )
 		print(toggleCounter)
 	end
 	if(toggleCounter == 1) then
-		event.target:setSequence("bubble_paper");
+		event.target:setSequence("bubble_scissor");
 		print("bubble_paper")
 		print(toggleCounter)
 	end
 	if(toggleCounter == 2) then
-		event.target:setSequence("bubble_scissor");
+		event.target:setSequence("bubble_paper");
 		print("bubble_scissor")
 		print(toggleCounter)
 		return

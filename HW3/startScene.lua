@@ -22,7 +22,7 @@ local function startButtonClicked ( event )
 		print("clicked")
 		composer.removeScene("startScene")
 		--composer.gotoScene( "level1");
-      composer.gotoScene( "level1");
+      composer.gotoScene( "level3");
 	end
 end
 

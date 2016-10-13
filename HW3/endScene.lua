@@ -47,12 +47,7 @@ function scene:create( event )
    alex = display.newSprite( alexSheet, alexSeqData );
    alex.x = _W/2
    alex.y = 3*_H/4 + 40
-   local i = math.random(0,1)
-   if(i == 0) then
-   	alex:setSequence( "alex_eating" )
-   else
-   	alex:setSequence( "alex_jail" )
-   end
+   alex:setSequence( "alex_eating" )
    sceneGroup:insert(alex)
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
