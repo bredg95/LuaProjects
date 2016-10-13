@@ -21,8 +21,8 @@ local function startButtonClicked ( event )
 	if(event.phase == "ended") then
 		print("clicked")
 		composer.removeScene("startScene")
-		--composer.gotoScene( "level1");
-      composer.gotoScene( "level3");
+		composer.gotoScene( "level1");
+      --composer.gotoScene( "level3");
 	end
 end
 

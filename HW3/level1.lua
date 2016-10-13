@@ -97,15 +97,18 @@ local function shoot ()
 	if(toggleCounter == jankenHand) then
 		--tie
 		print("tie")
+		playAgainButton:setLabel("Draw! Play Again")
 	elseif(toggleCounter == 0) then
 		-- Janken: Scissor
 		if(jankenHand == 1) then
 			alexWins = alexWins + 1
 			print("alex wins")
+			playAgainButton:setLabel("Victory! Play Again")
 			roundCounter = roundCounter + 1
 		else
 			jankenWins = jankenWins + 1
 			print("janken wins")
+			playAgainButton:setLabel("Loss! Play Again")
 			roundCounter = roundCounter + 1
 		end
 	elseif(toggleCounter == 1) then
@@ -114,20 +117,24 @@ local function shoot ()
 		if(jankenHand == 2) then
 			alexWins = alexWins + 1
 			print("alex wins")
+			playAgainButton:setLabel("Victory! Play Again")
 			roundCounter = roundCounter + 1
 		else
 			jankenWins = jankenWins + 1
 			print("janken wins")
+			playAgainButton:setLabel("Loss! Play Again")
 			roundCounter = roundCounter + 1
 		end
 	elseif(toggleCounter == 2) then
 		if(jankenHand == 0) then
 			alexWins = alexWins + 1
 			print("alex wins")
+			playAgainButton:setLabel("Victory! Play Again")
 			roundCounter = roundCounter + 1
 		else
 			jankenWins = jankenWins + 1
 			print("janken wins")
+			playAgainButton:setLabel("Loss! Play Again")
 			roundCounter = roundCounter + 1
 		end
 	end
@@ -218,8 +225,6 @@ function scene:create( event )
    	sceneGroup:insert(nextButton)
    	sceneGroup:insert(playAgainButton)
    	sceneGroup:insert(hand)
-   	--sceneGroup:insert(t)
-   	--sceneGroup:insert()
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
  

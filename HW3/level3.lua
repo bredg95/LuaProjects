@@ -1,5 +1,10 @@
 -- level3.lua
 
+---------------------------------------------------------------------------------
+-- Most of the code in level 3 is similar to level 1 and 2
+-- The only differences with level 3 is the timing and number of rounds.  
+---------------------------------------------------------------------------------
+
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require("widget")
@@ -97,15 +102,18 @@ local function shoot ()
    if(toggleCounter == jankenHand) then
       --tie
       print("tie")
+      playAgainButton:setLabel("Draw! Play Again")
    elseif(toggleCounter == 0) then
       -- Janken: Scissor
       if(jankenHand == 1) then
          alexWins = alexWins + 1
          print("alex wins")
+         playAgainButton:setLabel("Victory! Play Again")
          roundCounter = roundCounter + 1
       else
          jankenWins = jankenWins + 1
          print("janken wins")
+         playAgainButton:setLabel("Loss! Play Again")
          roundCounter = roundCounter + 1
       end
    elseif(toggleCounter == 1) then
@@ -114,20 +122,24 @@ local function shoot ()
       if(jankenHand == 2) then
          alexWins = alexWins + 1
          print("alex wins")
+         playAgainButton:setLabel("Victory! Play Again")
          roundCounter = roundCounter + 1
       else
          jankenWins = jankenWins + 1
          print("janken wins")
+         playAgainButton:setLabel("Loss! Play Again")
          roundCounter = roundCounter + 1
       end
    elseif(toggleCounter == 2) then
       if(jankenHand == 0) then
          alexWins = alexWins + 1
          print("alex wins")
+         playAgainButton:setLabel("Victory! Play Again")
          roundCounter = roundCounter + 1
       else
          jankenWins = jankenWins + 1
          print("janken wins")
+         playAgainButton:setLabel("Loss! Play Again")
          roundCounter = roundCounter + 1
       end
    end
