@@ -1,0 +1,3 @@
+TODO:
+- move all code in main.lua to its own lua file
+- add main menu, settings, and level selection (although it will be one level)
