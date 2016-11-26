@@ -9,9 +9,10 @@ _W = display.contentWidth
 _H = display.contentHeight
 
 physics.start()
-physics.setDrawMode( "hybrid" )
 
-local hitTimer = system.getTimer( )
+--local hitTimer = nil --system.getTimer( )
+local startTime = 0;
+local beatTable = {};
 
 local missScore = display.newText("Miss: ", 10, _H-20, native.systemFont, 20 )
 local hitScore = display.newText("Hit: ", 100, _H -20, native.systemFont, 20 )
@@ -31,7 +32,6 @@ while (hitTime ~= nil) do
 	i = i + 1
 	hitTime = io.read("*n")
 end
-print(#timetable)
 io.input():close()
 io.input(tmp)
 local offset = 117
@@ -71,34 +71,26 @@ for i=1,totalMarks,1
 	end
 	indicatorGroup:insert(mark)
 end
-local offsetMark = distMark*offset/sixteenthBeat
---local displayCircle = display.newCircle(20, 10, 10 )
-local indicatorCircle = display.newCircle(20, 10, 10 )
-indicatorCircle.anchorX = 0
---displayCircle.anchorX = 0
-indicatorCircle:setFillColor( 0,1,0, 0.5)
-physics.addBody(indicatorCircle, "dynamic")
-indicatorCircle.isSensor = true;
-local function startBeatWindow (event)
-  if (event.phase == "began") then
-  	hitTimer = timer.performWithDelay( sixteenthBeat, function ()
-  		miss = miss + 1;
-  		missScore.text = "Miss: " .. miss
-  		end
-  	)
-  end
+
+function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
 end
-indicatorCircle:addEventListener("collision", startBeatWindow);
 
 function setupIndicatorBar()
 	for i=1,#timetable,1
 		do
 		local posX = distMark*((timetable[i])/sixteenthBeat)
+		-- print((timetable[i])/sixteenthBeat)
+		-- print(round((timetable[i])/sixteenthBeat, 0))
+		beatTable[round((timetable[i])/sixteenthBeat, 0)] = true;
 		local beat = display.newCircle(posX, 10, 10)
 		beat:setFillColor( 1,0,1,0.5)
-		physics.addBody(beat, "kinematic")
-		beat.isSensor = true;
 		indicatorGroup:insert(beat)
+		-- beatTable[]
+		-- physics.addBody(beat, "dynamic")
+		-- beat.isSensor = true;
+		-- beat.tagName = "beat" .. i
 	end
 end
 
@@ -107,9 +99,15 @@ local index = 0;
 local gameBox = display.newRect(  _W/2, _H/2, 200, 200 )
 local sound = audio.loadStream( "-insturmental version- Otokaze.mp3")
 function boxTapped (object, event)
-	timer.cancel(hitTimer)
-	hit = hit + 1
-	hitScore.text = "Hit: " .. hit;
+	-- timer.cancel(hitTimer)
+	local hitTime = round((system.getTimer() - startTime)/sixteenthBeat)
+	if(beatTable[hitTime] or beatTable[hitTime - 1] or beatTable[hitTime + 1]) then
+		hit = hit + 1
+		hitScore.text = "Hit: " .. hit;
+	else
+		miss = miss + 1;
+	  	missScore.text = "Miss: " .. miss
+	end
 end
 
 gameBox.tap = boxTapped
@@ -123,21 +121,46 @@ local options =
 setupIndicatorBar()
 
 physics.setGravity( 0, 0 )
-physics.addBody( indicatorGroup, "kinematic")
+physics.addBody( indicatorGroup, "dynamic")
 
-local pixpersec = distMark/(sixteenthBeat/1000)
-print(eighthBeat/1000)
+local pixpersec = (distMark-2)*1000/(math.ceil(quarterBeat)/4)
+print(quarterBeat)
 print(distMark)
- print(pixpersec)
-local function moveIndicatorBar()
-	indicatorGroup:setLinearVelocity( -pixpersec, 0 )
-end
+print(pixpersec)
+local offsetMark = distMark*offset/sixteenthBeat
+
+indicatorGroup.x = 20 --+ 2*offsetMark
+
+--local displayCircle = display.newCircle(20, 10, 10 )
+local indicatorCircle = display.newCircle(20, 10, 10 )
+indicatorCircle.anchorX = 0
+--displayCircle.anchorX = 0
+indicatorCircle:setFillColor( 0,1,0, 0.5)
+-- physics.addBody(indicatorCircle, "static")
+-- indicatorCircle.isSensor = true;
+-- indicatorGroup.tagName = "indicatorGroup"
+-- indicatorCircle.tagName = "indicatorCircle"
+-- local function startBeatWindow (event)
+--   if (event.phase == "began") then
+--   	print(event.target.tagName)
+--   	print(event.other.tagName)
+--   	if(event.other.tagName ~= "indicatorGroup") then 
+-- 	  	hitTimer = timer.performWithDelay( sixteenthBeat, function ()
+-- 	  		miss = miss + 1;
+-- 	  		missScore.text = "Miss: " .. miss
+-- 	  		end
+-- 	  	)
+--   	end
+--   end
+-- end
+-- indicatorCircle:addEventListener("collision", startBeatWindow);
+
 local function beginIndicator()
 	audio.setVolume(0.5)
 	--timer.performWithDelay( 100, moveIndicatorBar, 1 )
 	audio.play(sound, options )
+	startTime = system.getTimer()
 	indicatorGroup:setLinearVelocity( -pixpersec, 0 )
 	--indicatorCircle.bodyType = "dynamic"
 end
-indicatorGroup.x = indicatorCircle.x + 2*offsetMark
 timer.performWithDelay( 2000, beginIndicator, 1 )
