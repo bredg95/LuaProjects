@@ -38,6 +38,7 @@ local function nextButtonClicked ( event )
    -- Code for going to either the next level or the main menu if user lost
       isClicked = true
       hand:removeSelf( )
+      toggleCounter = 0
       if(alexWins == 3) then 
          composer.removeScene("level3")
          composer.gotoScene( "endScene");
