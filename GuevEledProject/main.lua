@@ -9,6 +9,56 @@ _W = display.contentWidth
 _H = display.contentHeight
 
 physics.start()
+physics.setGravity( 0, 600 )
+
+
+local topBar = display.newRect(0,20,_W+400,5)
+physics.addBody(topBar, "static")
+
+
+
+local testParticleSystem = physics.newParticleSystem(
+  {
+  filename = "image.png",
+  radius = 3,
+  imageRadius = 4
+  }
+)
+
+
+
+local function onTimer( event )
+
+    testParticleSystem:createParticle(
+      {
+      	--[[
+         flags = "powder",
+         velocityX = math.random(-1000,1000),
+         velocityY = math.random(-1000,1000),
+         color = { 1, 1, 1, 1 },
+         x = _W/2,
+         y = _H/2,
+         lifetime = 32.0
+         ]]--
+          flags = { "water" },
+	      x = _W/2,
+	      y = _H/2,
+	      velocityX = math.random(),
+	      velocityY = math.random(),
+	      --velocityX = 256,
+	      --velocityY = 480,
+	      color = { math.random(), math.random(), math.random(), 1 },
+	      lifetime = 32.0,
+      }
+    )
+    end
+
+--timer.performWithDelay( 100, onTimer, 0 )
+
+
+
+
+
 
 local startTime = 0;
 local beatTable = {};
@@ -27,7 +77,6 @@ local map = require("songs")
 map:setSong(2)
 local indicatorGroup = map:setupIndicatorBar()
 local index = 0;
---local gameBox = display.newRect(  _W/2, _H/2, 200, 200 )
 local sound = audio.loadStream(map.songFile)
 
 
@@ -43,13 +92,15 @@ local gameBox = display.newRoundedRect(_W/2,_H/2,100,100,20)
 gameBox:setFillColor(0.3,0.5,0.7)
 gameBox.path.radius = 200
 
-local doubleRects1 = display.newRoundedRect(_W/2,_H/2 - 150,100,100,20)
+
+local doubleRects1 = display.newRoundedRect(_W/2,_H/2 - 150,80,80,20)
 doubleRects1:setFillColor(0,0.7,0.3)
 doubleRects1.alpha = 0
 
-local doubleRects2 = display.newRoundedRect(_W/2,_H/2 + 150 ,100,100,20)
+local doubleRects2 = display.newRoundedRect(_W/2,_H/2 + 150 ,80,80,20)
 doubleRects2:setFillColor(0,0.7,0.3)
 doubleRects2.alpha = 0
+
 
 
 
@@ -58,10 +109,32 @@ function boxTapped (object, event)
 	local tapTime = system.getTimer()
 	local hitTime = round((tapTime - startTime)/(map.quarterBeat/map.beatDivisor))
 	print(hitTime)
+	print("taptTime: ", tapTime)
+
+	onTimer()
+
+	if(tapTime < 31000) then
+		morphBasic()
+	elseif(tapTime >= 31000 and tapTime < 50000) then
+		morphBasic2()
+	elseif(tapTime >= 50000 and tapTime < 71000) then
+		morphWithSpins()
+	elseif(tapTime >= 71000 and tapTime < 81000) then
+		morphBasic()
+	elseif(tapTime >= 81000 and tapTime < 91000) then
+		morphBasic2()
+	elseif(tapTime >= 91000 and tapTime < 134000) then
+		morphWithSpins()
+	elseif(tapTime >= 134000 and tapTime < 154000) then
+		morph4()
+	elseif(tapTime >= 154000 ) then
+		morphBasic2()
+		morph4()
+	end
 
 
 
-
+	--[[
 	if(counter < 20 ) then
 		morphBasic()
 	elseif(counter > 20 and counter < 100) then
@@ -71,7 +144,7 @@ function boxTapped (object, event)
 	elseif(counter > 150 and counter < 200) then
 		morph4()
 	end
-	
+	]]--
 	counter = counter + 1
 
 
@@ -203,18 +276,6 @@ end
 
 
 
-function morphBasic2( event )
-	print("morphBasic2")
-	counter = counter + 1
-	print(counter)
-
-	gameBox:setFillColor(math.random(), math.random(), math.random())
-	transition.to( gameBox.path, { time=500 , width=200, height=200, radius=220,onComplete=listener1 } )
-	transition.to( gameBox.path, { time=100 , width=100, height=100, radius=20,onComplete=listener1 } )
-end
-
-
-
 
 
 
@@ -273,7 +334,9 @@ function morph4( event )
 	transition.to( square7, { rotation=-rotateAngle2, time=200, transition=easing.inOutCubic } )	
 	transition.to( square8, { rotation= rotateAngle2, time=200, transition=easing.inOutCubic } )
 
-
+	transition.to( gameBox.path, { time=150 , width=110, height=110 } )
+	transition.to( gameBox.path, { time=100 , width=100, height=100 } )
+	gameBox:setFillColor(math.random(), math.random(), math.random())
 
 	--[[
 	transition.to( square1, { rotation=-rotateAngle, time=200, x=x2,y=y2,transition=easing.inOutCubic } )	
@@ -291,7 +354,7 @@ function morph4( event )
 
 	
 	rotateAngle = rotateAngle + 45
-	rotateAngle2 = rotateAngle2 + 120
+	rotateAngle2 = rotateAngle2 + 30
 	square1:setFillColor(math.random(), math.random(), math.random())
 	square2:setFillColor(math.random(), math.random(), math.random())
 	square3:setFillColor(math.random(), math.random(), math.random())
@@ -302,6 +365,29 @@ function morph4( event )
 	square8:setFillColor(math.random(), math.random(), math.random())
 
 	
+end
+
+
+
+
+
+
+function morphBasic2( event )
+	print("morphBasic2")
+	counter = counter + 1
+	print(counter)
+	square1.alpha = 0
+	square2.alpha = 0
+	square3.alpha = 0
+	square4.alpha = 0
+	square5.alpha = 0
+	square6.alpha = 0
+	square7.alpha = 0
+	square8.alpha = 0
+
+	gameBox:setFillColor(math.random(), math.random(), math.random())
+	transition.to( gameBox.path, { time=500 , width=200, height=200, radius=220,onComplete=listener1 } )
+	transition.to( gameBox.path, { time=100 , width=100, height=100, radius=20,onComplete=listener1 } )
 end
 
 
@@ -366,12 +452,41 @@ end
 
 
 
---gameBox.tap = morphSideEffect
---gameBox.tap = morphWithSpins
---gameBox.tap = morphBasic2
---gameBox.tap = morphBasic  
---gameBox.tap = morph4		--Need spinning rectangles
---gameBox.tap = morph5
+--addEventListener need this to listen for a particular beat and then displays graphics
+--[[if(tapTime == 141000) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 141500) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 142000) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 142500) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 14000) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end]]--
 
 
---gameBox:addEventListener("tap",gameBox)
+
+
+
+
+
