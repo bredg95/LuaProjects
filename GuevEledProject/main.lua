@@ -10,7 +10,6 @@ _H = display.contentHeight
 
 physics.start()
 
---local hitTimer = nil --system.getTimer( )
 local startTime = 0;
 local beatTable = {};
 
@@ -20,90 +19,34 @@ missScore.anchorX = 0
 hitScore.anchorX = 0
 local miss = 0
 local hit = 0
-local timetable = {}
-local path = system.pathForFile( "timeTableAmeMichi.txt")
-local tmp = io.input()
-io.input(path)
-
-local hitTime = io.read("*n")
-local i = 1;
-while (hitTime ~= nil) do
-	timetable[i] = hitTime
-	i = i + 1
-	hitTime = io.read("*n")
-end
-io.input():close()
-io.input(tmp)
-local offset = 117
-local bpm = 95
-local quarterBeat = 1000*60/bpm
-local wholeBeat = quarterBeat*4
-local eighthBeat = quarterBeat/2
-local sixteenthBeat = quarterBeat/4
-local length = 135167
---local timetable = {2490, 2790, 3240, 3390, 3690, 4140, 4290, 4440, 4590, 4890, 5190, 5640, 5790, 6090, 6390, 6690 }
-local usertable = {}
-local distMark = 30; --distance between sixteenth beat marks
-local totalMarks = math.ceil((length-offset)/wholeBeat)*16
-local indicatorBG = display.newRect(0,0,_W,20)
-indicatorBG.anchorX = 0
-indicatorBG.anchorY = 0
-local indicatorGroup = display.newGroup( );
-indicatorGroup.anchorX = 0
---local indicatorBar = display.newRect(0, 0, distMark*(16*length/wholeBeat), 20 )
---indicatorBar.anchorY = 0
---indicatorBar.anchorX = 0
---indicatorGroup:insert(indicatorBar)
-local x,y = distMark*offset/sixteenthBeat,20
-for i=1,totalMarks,1
-	do
-	x = x + distMark
-	local mark; -- = display.newLine(x, y, x, y-10)
-	if(i%16 == 0) then
-		mark = display.newLine(x, y, x, 0)
-		mark:setStrokeColor(0,1,0,1)
-	elseif (i%4 == 0) then
-		mark = display.newLine(x, y, x, y-10)
-		mark:setStrokeColor(1,0,0,1)
-	else
-		mark = display.newLine(x, y, x, y-5)
-		mark:setStrokeColor(0,0,1,1)
-	end
-	indicatorGroup:insert(mark)
-end
-
 function round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
 end
-
-function setupIndicatorBar()
-	for i=1,#timetable,1
-		do
-		local posX = distMark*((timetable[i])/sixteenthBeat)
-		-- print((timetable[i])/sixteenthBeat)
-		-- print(round((timetable[i])/sixteenthBeat, 0))
-		beatTable[round((timetable[i])/sixteenthBeat, 0)] = true;
-		local beat = display.newCircle(posX, 10, 10)
-		beat:setFillColor( 1,0,1,0.5)
-		indicatorGroup:insert(beat)
-		-- beatTable[]
-		-- physics.addBody(beat, "dynamic")
-		-- beat.isSensor = true;
-		-- beat.tagName = "beat" .. i
-	end
-end
-
---system.getTimer()
+local map = require("songs")
+map:setSong(2)
+local indicatorGroup = map:setupIndicatorBar()
 local index = 0;
 local gameBox = display.newRect(  _W/2, _H/2, 200, 200 )
-local sound = audio.loadStream( "-insturmental version- Otokaze.mp3")
+local sound = audio.loadStream(map.songFile)
 function boxTapped (object, event)
-	-- timer.cancel(hitTimer)
-	local hitTime = round((system.getTimer() - startTime)/sixteenthBeat)
-	if(beatTable[hitTime] or beatTable[hitTime - 1] or beatTable[hitTime + 1]) then
+	local tapTime = system.getTimer()
+	local hitTime = round((tapTime - startTime)/(map.quarterBeat/map.beatDivisor))
+	print(hitTime)
+	if(map.beatTable[hitTime] ) then
 		hit = hit + 1
 		hitScore.text = "Hit: " .. hit;
+		map.beatTable[hitTime] = nil
+	elseif(map.beatTable[hitTime - 1] or map.beatTable[hitTime + 1]) then
+		hit = hit + 1
+		hitScore.text = "Hit: " .. hit;
+		map.beatTable[hitTime-1] = nil
+		map.beatTable[hitTime+1] = nil
+	elseif(map.beatTable[hitTime - 2] or map.beatTable[hitTime + 2]) then
+		hit = hit + 1
+		hitScore.text = "Hit: " .. hit;
+		map.beatTable[hitTime-2] = nil
+		map.beatTable[hitTime+2] = nil
 	else
 		miss = miss + 1;
 	  	missScore.text = "Miss: " .. miss
@@ -116,51 +59,23 @@ gameBox:addEventListener( "tap", gameBox )
 local options = 
 {
 	channel = 1,
-	duration = 135167
+	duration = map.length
 }
-setupIndicatorBar()
 
 physics.setGravity( 0, 0 )
 physics.addBody( indicatorGroup, "dynamic")
+ 
+indicatorGroup.x = 20 
 
-local pixpersec = (distMark-2)*1000/(math.ceil(quarterBeat)/4)
-print(quarterBeat)
-print(distMark)
-print(pixpersec)
-local offsetMark = distMark*offset/sixteenthBeat
-
-indicatorGroup.x = 20 --+ 2*offsetMark
-
---local displayCircle = display.newCircle(20, 10, 10 )
 local indicatorCircle = display.newCircle(20, 10, 10 )
 indicatorCircle.anchorX = 0
---displayCircle.anchorX = 0
 indicatorCircle:setFillColor( 0,1,0, 0.5)
--- physics.addBody(indicatorCircle, "static")
--- indicatorCircle.isSensor = true;
--- indicatorGroup.tagName = "indicatorGroup"
--- indicatorCircle.tagName = "indicatorCircle"
--- local function startBeatWindow (event)
---   if (event.phase == "began") then
---   	print(event.target.tagName)
---   	print(event.other.tagName)
---   	if(event.other.tagName ~= "indicatorGroup") then 
--- 	  	hitTimer = timer.performWithDelay( sixteenthBeat, function ()
--- 	  		miss = miss + 1;
--- 	  		missScore.text = "Miss: " .. miss
--- 	  		end
--- 	  	)
---   	end
---   end
--- end
--- indicatorCircle:addEventListener("collision", startBeatWindow);
+
 
 local function beginIndicator()
 	audio.setVolume(0.5)
-	--timer.performWithDelay( 100, moveIndicatorBar, 1 )
 	audio.play(sound, options )
+	indicatorGroup:setLinearVelocity( -map.pixPerSec, 0 )
 	startTime = system.getTimer()
-	indicatorGroup:setLinearVelocity( -pixpersec, 0 )
-	--indicatorCircle.bodyType = "dynamic"
 end
 timer.performWithDelay( 2000, beginIndicator, 1 )
