@@ -11,15 +11,12 @@ _W = display.contentWidth
 _H = display.contentHeight
 
 
-local backGround = display.newRect(_W,_H,10000,10000)
-backGround:setFillColor(0,0,0)
-
 
 local physics = require('physics')
 
 
 physics.start()
-physics.setGravity( 0, 6 )
+physics.setGravity( 0, 600 )
 
 
 local topBar = display.newRect(0,20,_W+400,5)
@@ -37,7 +34,7 @@ local testParticleSystem = physics.newParticleSystem(
 
 
 
-local function onTapped( event )
+local function onTimer( event )
 
     testParticleSystem:createParticle(
       {
@@ -63,7 +60,7 @@ local function onTapped( event )
     )
     end
 
---timer.performWithDelay( 100, onTapped, 0 )
+--timer.performWithDelay( 100, onTimer, 0 )
 
 
 
@@ -121,7 +118,7 @@ function boxTapped (object, event)
 	print(hitTime)
 	print("taptTime: ", tapTime)
 
-	onTapped()
+	onTimer()
 
 	if(tapTime < 31000) then
 		morphBasic()
@@ -131,11 +128,8 @@ function boxTapped (object, event)
 		morphWithSpins()
 	elseif(tapTime >= 71000 and tapTime < 81000) then
 		morphBasic()
-		morphSideEffect()
 	elseif(tapTime >= 81000 and tapTime < 91000) then
 		morphBasic2()
-		rectFallFunction()
-
 	elseif(tapTime >= 91000 and tapTime < 134000) then
 		morphWithSpins()
 	elseif(tapTime >= 134000 and tapTime < 154000) then
@@ -294,7 +288,7 @@ end
 
 
 function morphBasic( event )
-	transition.to( gameBox.path, { time=500 , width=120, height=120 } )
+	transition.to( gameBox.path, { time=150 , width=120, height=120 } )
 	transition.to( gameBox.path, { time=100 , width=100, height=100 } )
 end
 
@@ -309,14 +303,14 @@ local y2 = _H/2+15
 local y3 = _H/2
 
 
-local square1 = display.newRect(_W/2,100,20,80)
-local square2 = display.newRect(_W/2,100,20,80)
-local square3 = display.newRect(_W/2,_H/2+150,20,80)
-local square4 = display.newRect(_W/2,_H/2+150,20,80)
-local square5 = display.newRect(_W/2+100,_H/2,20,80)
-local square6 = display.newRect(_W/2+100,_H/2,20,80)
-local square7 = display.newRect(_W/2-100,_H/2,20,80)
-local square8 = display.newRect(_W/2-100,_H/2,20,80)
+local square1 = display.newRect(_W/2,100,20,100)
+local square2 = display.newRect(_W/2,100,20,100)
+local square3 = display.newRect(_W/2,_H/2+150,20,100)
+local square4 = display.newRect(_W/2,_H/2+150,20,100)
+local square5 = display.newRect(_W/2+100,_H/2,20,100)
+local square6 = display.newRect(_W/2+100,_H/2,20,100)
+local square7 = display.newRect(_W/2-100,_H/2,20,100)
+local square8 = display.newRect(_W/2-100,_H/2,20,100)
 square1.alpha = 0
 square2.alpha = 0
 square3.alpha = 0
@@ -419,10 +413,10 @@ local rects = {}
 function createRects(x, y, width, height)
 	print("createRects")
 	
+	
+
     local rect = display.newRect(x, y, width, height);
-    rect:setFillColor(math.random(),math.random(),math.random())
     table.insert(rects, rect)
-    physics.addBody(rect)
     return rect
 end
 
@@ -434,16 +428,17 @@ function morphSideEffect( event )
 	
 		
 
+	
 	if(i<10) then
 		createRects(x,y,10,100)
 		x = x + 20
 	elseif(10 < i) then
-		createRects(x2,310,10,100)
+		createRects(x2,210,10,100)
 		x2 = x2 + 20
 	elseif(i > 20) then
-		print("rectDanceFunction")		
-		rectFallFunction()
+		print("rectDanceFunction")
 		
+		--rectDanceFunction()
 	end
 
 	i = i+1
@@ -451,13 +446,6 @@ function morphSideEffect( event )
 	--transition.to( o.path, { time=500 , vertices={100,-110, 27,-35, 105,-35, 43,16, 65,90, 0,45, -65,90, -43,15, -105,-35, -27,-35,},onComplete=listener1 } )
 end
 
-function rectFallFunction( event )
-	-- body
-	print("\n\n\n\n\n\nrectFallFunction\n\n\n\n\n\n")
-	for i=0,20 do
-		transition.to( rects[i], { time=800, y = 700, transition=easing.inOutCubic,onComplete=listener1 } )
-	end
-end
 
 
 
@@ -472,81 +460,40 @@ end
 
 
 --addEventListener need this to listen for a particular beat and then displays graphics
+--[[if(tapTime == 141000) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 141500) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 142000) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 142500) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end
+		if(tapTime == 14000) then
+			doubleRects1.alpha = 1
+			doubleRects2.alpha = 1
+			transition.to( doubleRects1, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+			transition.to( doubleRects2, { time=300, alpha = 0 , width=100, height=100, onComplete=listener1 } )
+		end]]--
 
-function onTimer( event )
 
-	
-	--transition.to(backGround, time=500,color{math.random(), math.random(), math.random()},onComplete=listener1)
-	local tapTime = system.getTimer()
-	local hitTime = round((tapTime - startTime)/(map.quarterBeat/map.beatDivisor))
-	if(tapTime >= 140500 and tapTime < 141000 ) then
-		doubleRects1.alpha = 1
-		doubleRects2.alpha = 1
-		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
-		transition.to( doubleRects2, { time=300, alpha = 0 , onComplete=listener1 } )
 
-	end
-	if(tapTime >= 141000 and tapTime < 141500) then
-	--if(tapTime >= 4000 and tapTime < 4500 ) then
-		doubleRects1.alpha = 1
-		doubleRects2.alpha = 1
-		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
-		transition.to( doubleRects2, { time=300, alpha = 0 , onComplete=listener1 } )
-		
-	end
-	if(tapTime >= 142000 and tapTime < 142500) then
-	--if(tapTime >= 5000 and tapTime < 5500 ) then
-		doubleRects1.alpha = 1
-		doubleRects2.alpha = 1
-		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
-		transition.to( doubleRects2, { time=300, alpha = 0 ,  onComplete=listener1 } )
-		
-	end
-	if(tapTime == 142500 and tapTime < 143000) then
-	--if(tapTime >= 6000 and tapTime < 6500 ) then
-		doubleRects1.alpha = 1
-		doubleRects2.alpha = 1
-		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
-		transition.to( doubleRects2, { time=300, alpha = 0 , onComplete=listener1 } )
-		
-		
-	end
-	if(tapTime == 143000 and tapTime < 143500) then
-	--if(tapTime >= 7000 and tapTime < 7500 ) then
-		doubleRects1.alpha = 1
-		doubleRects2.alpha = 1
-		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
-		transition.to( doubleRects2, { time=300, alpha = 0 ,  onComplete=listener1 } )
-	end
 
-end
-
---[[
-local red = 0
-local green = 0
-local blue = 0
-function onTimer2( event )
-
-	if(red == 1) then
-		red = 0
-	end
-	if(green == 1) then
-		green = 0
-	end
-	if(blue == 1) then
-		blue = 0
-	end
-
-	red = (red + 0.1)
-	green = (green + 0.2)
-	blue = (blue + 0.3)
-
-	backGround:setFillColor(red, green, blue)
-
-end
-]]--
-timer.performWithDelay( 100, onTimer, 0 )
---timer.performWithDelay(1000,onTimer2,0)
 
 
 
