@@ -6,6 +6,7 @@
 local composer = require("composer")
 local scene  = composer.newScene( )
 local physics = require('physics')
+local widget = require('widget')
 _W = display.contentWidth
 _H = display.contentHeight
 
@@ -37,29 +38,17 @@ local function onTapped( event )
 
     testParticleSystem:createParticle(
       {
-      	--[[
-         flags = "powder",
-         velocityX = math.random(-1000,1000),
-         velocityY = math.random(-1000,1000),
-         color = { 1, 1, 1, 1 },
-         x = _W/2,
-         y = _H/2,
-         lifetime = 32.0
-         ]]--
           flags = { "water" },
 	      x = _W/2,
 	      y = _H/2,
 	      velocityX = math.random(),
 	      velocityY = math.random(),
-	      --velocityX = 256,
-	      --velocityY = 480,
 	      color = { math.random(), math.random(), math.random(), 1 },
 	      lifetime = 32.0,
       }
     )
     end
 
---timer.performWithDelay( 100, onTimer, 0 )
 
 
 local startTime = 0;
@@ -131,20 +120,6 @@ function boxTapped (object, event)
 		morph4()
 		morph5()
 	end
-
-
-
-	--[[
-	if(counter < 20 ) then
-		morphBasic()
-	elseif(counter > 20 and counter < 100) then
-		morphBasic2()
-	elseif(counter > 10 and counter < 150) then
-		morphWithSpins()
-	elseif(counter > 150 and counter < 200) then
-		morph4()
-	end
-	]]--
 	counter = counter + 1
 
 
@@ -232,20 +207,6 @@ local height = 100
 local angle = 60
 
 
-
-
---local gameBox = display.newRoundedRect(_W/2,_H/2,width/2,height,20)
---gameBox:setFillColor(0.3,0.5,0.7)
-----gameBox.alpha = 0
---gameBox.path.radius = 200
-
-
-
-
-
-
---local counter = 0
---local doubleCounter = 0
 
 function morphWithSpins( event )
 
@@ -356,18 +317,6 @@ function morph4( event )
 	transition.to( gameBox.path, { time=100 , width=100, height=100 } )
 	gameBox:setFillColor(math.random(), math.random(), math.random())
 
-	--[[
-	transition.to( square1, { rotation=-rotateAngle, time=200, x=x2,y=y2,transition=easing.inOutCubic } )	
-	transition.to( square2, { rotation= rotateAngle, time=200, x=x2,y=y2,transition=easing.inOutCubic } )	
-	transition.to( square3, { rotation=-rotateAngle, time=200, x=x1,y=y1,transition=easing.inOutCubic } )	
-	transition.to( square4, { rotation= rotateAngle, time=200, x=x1,y=y1,transition=easing.inOutCubic } )	
-
-	transition.to( square5, { rotation=-rotateAngle2, time=200, x=x1,y=y2,transition=easing.inOutCubic } )	
-	transition.to( square6, { rotation= rotateAngle2, time=200, x=x1,y=y2,transition=easing.inOutCubic } )	
-	transition.to( square7, { rotation=-rotateAngle2, time=200, x=x1,y=y3,transition=easing.inOutCubic } )	
-	transition.to( square8, { rotation= rotateAngle2, time=200, x=x1,y=y3,transition=easing.inOutCubic } )
-
-	]]--
 	
 
 	
@@ -453,7 +402,6 @@ function morphSideEffect( event )
 
 	i = i+1
 
-	--transition.to( o.path, { time=500 , vertices={100,-110, 27,-35, 105,-35, 43,16, 65,90, 0,45, -65,90, -43,15, -105,-35, -27,-35,},onComplete=listener1 } )
 end
 
 function rectFallFunction( event )
@@ -470,8 +418,6 @@ end
 
 function morph5( event )
 	-- body
-	--transition.to( gameBox.path, { time=500 , width=200, height=200, radius=220,onComplete=listener1 } )
-	--transition.to( gameBox.path, { time=100 , width=100, height=100, radius=20,onComplete=listener1 } )
 	doubleRects1.alpha = 1
 	doubleRects2.alpha = 1
 	transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
@@ -480,7 +426,34 @@ end
 
 
 
---addEventListener need this to listen for a particular beat and then displays graphics
+
+
+local function backButtonClicked ( event )
+	if(event.phase == "ended") then
+		print("clicked")
+
+		scene:destroy()
+		audio.stop()
+		hitScore.text = ""
+		missScore.text = ""
+		composer.removeScene("gameView")
+		composer.gotoScene( "mainMenu")
+	end
+end
+
+local backButton = widget.newButton( 
+{
+	x = _W/2,
+	y = _H/2 + 260,
+	id = "backButton",
+	label = "Back",
+	labelColor = {default ={0,0,0}, over = {0,0,0}},
+	textOnly = false,
+	shape = "square",
+	fillColor = {default = {1,1,1,0.7}, over={1,0.2,0.5,1}},
+	onEvent = backButtonClicked
+
+} )
 
 function onTimer( event )
 
@@ -496,7 +469,6 @@ function onTimer( event )
 
 	end
 	if(tapTime >= 144000 and tapTime < 144500) then
-	--if(tapTime >= 4000 and tapTime < 4500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
 		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
@@ -504,7 +476,6 @@ function onTimer( event )
 		
 	end
 	if(tapTime >= 145000 and tapTime < 145500) then
-	--if(tapTime >= 5000 and tapTime < 5500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
 		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
@@ -512,7 +483,6 @@ function onTimer( event )
 		
 	end
 	if(tapTime == 146000 and tapTime < 146500) then
-	--if(tapTime >= 6000 and tapTime < 6500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
 		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
@@ -521,39 +491,28 @@ function onTimer( event )
 		
 	end
 	if(tapTime == 147000 and tapTime < 147500) then
-	--if(tapTime >= 7000 and tapTime < 7500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
 		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
 		transition.to( doubleRects2, { time=300, alpha = 0 ,  onComplete=listener1 } )
 	end
 
+	if(tapTime > 179000) then
+		--composer.removeScene("gameView")
+		--composer.gotoScene("gameOver")
+
+		local myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
+		myText:setFillColor( 1, 1, 1 )
+
+		local myText2 = display.newText( "Score: ", 100, 200, native.systemFont, 16 )
+		myText:setFillColor( 1, 1, 1 )
+
+		backButton.alpha = 1
+		
+	end
+
 end
 
---[[
-local red = 0
-local green = 0
-local blue = 0
-function onTimer2( event )
-
-	if(red == 1) then
-		red = 0
-	end
-	if(green == 1) then
-		green = 0
-	end
-	if(blue == 1) then
-		blue = 0
-	end
-
-	red = (red + 0.1)
-	green = (green + 0.2)
-	blue = (blue + 0.3)
-
-	backGround:setFillColor(red, green, blue)
-
-end
-]]--
 timer.performWithDelay( 100, onTimer, 0 )
 --timer.performWithDelay(1000,onTimer2,0)
 
