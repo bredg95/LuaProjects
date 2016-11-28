@@ -110,23 +110,23 @@ function boxTapped (object, event)
 
 	onTapped()
 
-	if(tapTime < 31000) then
+	if(tapTime < 33000) then
 		morphBasic()
-	elseif(tapTime >= 31000 and tapTime < 50000) then
+	elseif(tapTime >= 33000 and tapTime < 52000) then
 		morphBasic2()
-	elseif(tapTime >= 50000 and tapTime < 71000) then
+	elseif(tapTime >= 52000 and tapTime < 73000) then
 		morphWithSpins()
-	elseif(tapTime >= 71000 and tapTime < 82000) then
+	elseif(tapTime >= 73000 and tapTime < 83000) then
 		morphBasic()
 		morphSideEffect()
-	elseif(tapTime >= 82000 and tapTime < 92000) then
+	elseif(tapTime >= 83000 and tapTime < 93000) then
 		morphBasic2()
 		rectFallFunction()
-	elseif(tapTime >= 92000 and tapTime < 135000) then
+	elseif(tapTime >= 93000 and tapTime < 136000) then
 		morphWithSpins()
-	elseif(tapTime >= 135000 and tapTime < 155000) then
+	elseif(tapTime >= 136000 and tapTime < 156000) then
 		morph4()
-	elseif(tapTime >= 155000 ) then
+	elseif(tapTime >= 156000 ) then
 		morphBasic2()
 		morph4()
 		morph5()
@@ -488,14 +488,14 @@ function onTimer( event )
 
 	local tapTime = system.getTimer()
 	local hitTime = round((tapTime - startTime)/(map.quarterBeat/map.beatDivisor))
-	if(tapTime >= 140500 and tapTime < 141000 ) then
+	if(tapTime >= 143500 and tapTime < 144000 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
 		transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
 		transition.to( doubleRects2, { time=300, alpha = 0 , onComplete=listener1 } )
 
 	end
-	if(tapTime >= 141000 and tapTime < 141500) then
+	if(tapTime >= 144000 and tapTime < 144500) then
 	--if(tapTime >= 4000 and tapTime < 4500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
@@ -503,7 +503,7 @@ function onTimer( event )
 		transition.to( doubleRects2, { time=300, alpha = 0 , onComplete=listener1 } )
 		
 	end
-	if(tapTime >= 142000 and tapTime < 142500) then
+	if(tapTime >= 145000 and tapTime < 145500) then
 	--if(tapTime >= 5000 and tapTime < 5500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
@@ -511,7 +511,7 @@ function onTimer( event )
 		transition.to( doubleRects2, { time=300, alpha = 0 ,  onComplete=listener1 } )
 		
 	end
-	if(tapTime == 142500 and tapTime < 143000) then
+	if(tapTime == 146000 and tapTime < 146500) then
 	--if(tapTime >= 6000 and tapTime < 6500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1
@@ -520,7 +520,7 @@ function onTimer( event )
 		
 		
 	end
-	if(tapTime == 143000 and tapTime < 143500) then
+	if(tapTime == 147000 and tapTime < 147500) then
 	--if(tapTime >= 7000 and tapTime < 7500 ) then
 		doubleRects1.alpha = 1
 		doubleRects2.alpha = 1

@@ -139,9 +139,9 @@ local function backButtonClicked ( event )
 			local alert = native.showAlert( "Error", "Min Value is greater than Max value", { "OK" }, onComplete )
 		else
 			composer.removeScene("settings")
-			composer.gotoScene( "main")
-			composer.setVariable("minPauseTime", minval)
-			composer.setVariable("maxPauseTime", maxval)
+			composer.gotoScene( "mainMenu")
+			--composer.setVariable("minPauseTime", minval)
+			--composer.setVariable("maxPauseTime", maxval)
 		end
 	end
 end
