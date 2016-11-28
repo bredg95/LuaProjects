@@ -29,9 +29,6 @@ end
 
 function beatMap:setupIndicatorBar()
 	local totalMarks = 4*beatMap.beatDivisor*math.ceil((beatMap.length-beatMap.offset)/(beatMap.quarterBeat*4))
-	local indicatorBG = display.newRect(0,0,_W,20)
-	indicatorBG.anchorX = 0
-	indicatorBG.anchorY = 0
 	local indicatorGroup = display.newGroup( );
 	indicatorGroup.anchorX = 0
 	local x,y = distMark*beatMap.offset/(beatMap.quarterBeat/beatMap.beatDivisor),20
@@ -69,8 +66,8 @@ function beatMap:setupIndicatorBar()
 end
 
 -- Song Number indexes which song to use, i.e. 1 for Ame Michi and 2 for Lean On
-function beatMap:setSong(songNumber)
-	if(songNumber == 1) then
+function beatMap:setSong(songNum)
+	if(songNum == 1) then
 		beatMap.timeTable = setTimeTable("timeTable_AmeMichi.txt")
 		beatMap.length = 135167
 		beatMap.bpm = 95
@@ -78,14 +75,17 @@ function beatMap:setSong(songNumber)
 		beatMap.beatDivisor = 4
 		beatMap.offset = 117
 		beatMap.songFile = "song_AmeMichi.mp3"
-	elseif(songNumber == 2) then
+	elseif(songNum == 2) then
 		beatMap.timeTable = setTimeTable("timeTable_LeanOn.txt")
 		beatMap.length = 176588
 		beatMap.bpm = 120
+		beatMap.offset = 0
 		beatMap.quarterBeat = 1000*60/120
 		beatMap.beatDivisor = 6
 		beatMap.songFile = "song_leanOn.mp3"
 	end
 	beatMap.pixPerSec = (distMark-2)*1000/(math.ceil(beatMap.quarterBeat)/beatMap.beatDivisor)
 end
+
+
 return beatMap
