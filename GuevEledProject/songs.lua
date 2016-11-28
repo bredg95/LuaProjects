@@ -82,6 +82,7 @@ function beatMap:setSong(songNum)
 		beatMap.offset = 0
 		beatMap.quarterBeat = 1000*60/120
 		beatMap.beatDivisor = 6
+		distMark = 33
 		beatMap.songFile = "song_leanOn.mp3"
 	end
 	beatMap.pixPerSec = (distMark-2)*1000/(math.ceil(beatMap.quarterBeat)/beatMap.beatDivisor)
