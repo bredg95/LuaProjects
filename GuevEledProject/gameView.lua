@@ -32,7 +32,14 @@ local testParticleSystem = physics.newParticleSystem(
   }
 )
 
-
+local myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
+myText1.alpha = 0
+local myText2 = display.newText( "Score: ", 100, 230, native.systemFont, 16 )
+myText2.alpha = 0
+local myText3 = display.newText( "HitOverMiss: ", 100, 260, native.systemFont, 16 )
+myText3.alpha = 0
+local myText4 = display.newText( "Score: ", 100, 290, native.systemFont, 16 )
+myText4.alpha = 0
 
 local function onTapped( event )
 
@@ -56,6 +63,7 @@ local beatTable = {};
 
 local missScore = display.newText("Miss: ", 10, _H-20, native.systemFont, 20 )
 local hitScore = display.newText("Hit: ", 100, _H -20, native.systemFont, 20 )
+local totalNumberPossibleHits = 0
 missScore.anchorX = 0
 hitScore.anchorX = 0
 local miss = 0
@@ -123,7 +131,7 @@ function boxTapped (object, event)
 	counter = counter + 1
 
 
-
+	--print("\n\n\n\n\n\n\nmap.beatTable.length: ",map.beatTable[i])
 
 
 	if(map.beatTable[hitTime] ) then
@@ -156,6 +164,8 @@ function scene:create(event)
 	map:setSong(songNum)
 	indicatorGroup = map:setupIndicatorBar()
 	sound = audio.loadStream(map.songFile)
+
+	--print("\n\n\n\n\n\n\ntotalNumberPossibleHits", map.length)
 
 	soundOptions = 
 	{
@@ -434,6 +444,16 @@ local function backButtonClicked ( event )
 
 		scene:destroy()
 		audio.stop()
+		myText1.text = ""		
+		myText2.text = ""
+		myText3.text = ""
+		myText4.text = ""
+
+		myText1.alpha = 0
+		myText2.alpha = 0
+		myText3.alpha = 0
+		myText4.alpha = 0
+
 		hitScore.text = ""
 		missScore.text = ""
 		composer.removeScene("gameView")
@@ -457,6 +477,7 @@ local backButton = widget.newButton(
 
 function onTimer( event )
 
+		
 	
 
 	local tapTime = system.getTimer()
@@ -500,12 +521,23 @@ function onTimer( event )
 	if(tapTime > 179000) then
 		--composer.removeScene("gameView")
 		--composer.gotoScene("gameOver")
+		local HitOverMiss = hit/miss
+		--math.round(HitOverMiss*10)*0.1
+		print("HitOverMiss = ",HitOverMiss)
+		hitOverMiss = math.round(HitOverMiss*10)*0.1
+		myText1.alpha = 1
+		myText2.alpha = 1
+		myText3.alpha = 1
+		myText4.alpha = 1
+		myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
+		myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
+		myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
+		myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
 
-		local myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-		myText:setFillColor( 1, 1, 1 )
-
-		local myText2 = display.newText( "Score: ", 100, 200, native.systemFont, 16 )
-		myText:setFillColor( 1, 1, 1 )
+		myText1:setFillColor( 1, 1, 1 )
+		myText2:setFillColor( 1, 1, 1 )
+		myText3:setFillColor( 1, 1, 1 )
+		myText4:setFillColor( 1, 1, 1 )
 
 		backButton.alpha = 1
 		
