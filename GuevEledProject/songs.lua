@@ -75,6 +75,7 @@ function beatMap:setSong(songNum)
 		beatMap.beatDivisor = 4
 		beatMap.offset = 117
 		beatMap.songFile = "song_AmeMichi.mp3"
+		beatMap.pixPerSec = (distMark-0.5)*1000/(math.ceil(beatMap.quarterBeat)/beatMap.beatDivisor)
 	elseif(songNum == 2) then
 		beatMap.timeTable = setTimeTable("timeTable_LeanOn.txt")
 		beatMap.length = 176588
@@ -84,8 +85,9 @@ function beatMap:setSong(songNum)
 		beatMap.beatDivisor = 6
 		distMark = 33
 		beatMap.songFile = "song_leanOn.mp3"
+		beatMap.pixPerSec = (distMark-0.5)*1000/(math.ceil(beatMap.quarterBeat)/beatMap.beatDivisor)
 	end
-	beatMap.pixPerSec = (distMark-2)*1000/(math.ceil(beatMap.quarterBeat)/beatMap.beatDivisor)
+	
 end
 
 

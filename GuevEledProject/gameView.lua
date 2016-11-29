@@ -175,6 +175,7 @@ function scene:create(event)
 
 	physics.setGravity( 0, 0 )
 	physics.addBody( indicatorGroup, "dynamic")
+	indicatorGroup.isSensor = true
 	 
 	indicatorGroup.x = 20 
 
@@ -186,13 +187,13 @@ function scene:create(event)
 	sceneGroup:insert(indicatorCircle)
 	sceneGroup:insert(gameBox)
 	sceneGroup:insert(topBar)
+	sceneGroup:insert(missScore)
+	sceneGroup:insert(hitScore)
 
 	--sceneGroup:insert(indicatorBG)
 end
 
 local function beginIndicator()
-	audio.setVolume(0.5)
-	audio.play(sound, soundOptions )
 	indicatorGroup:setLinearVelocity( -map.pixPerSec, 0 )
 	startTime = system.getTimer()
 end
@@ -202,7 +203,11 @@ local songNum = 0;
 function scene:show(event)
 	local sceneGroup = self.view
 	if(event.phase == "will") then
-		timer.performWithDelay( 2000, beginIndicator, 1 )
+		audio.setVolume(0.5)
+		audio.play(sound, soundOptions )
+		timer.performWithDelay( 200, beginIndicator, 1 )
+		
+		--timer.performWithDelay( map.length, function)
 	end
 end
 
