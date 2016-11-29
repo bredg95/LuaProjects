@@ -14,6 +14,7 @@ local map = require("songs")
 local indicatorGroup, indicatorCircle, sound, soundOptions;
 
 physics.start()
+audio.setVolume(0.1)
 physics.setGravity( 0, 600 )
 
 
@@ -158,6 +159,10 @@ gameBox.tap = boxTapped
 
 gameBox:addEventListener( "tap", gameBox )
 
+function moveToGameOver() 
+
+end
+
 function scene:create(event)
 	local sceneGroup = self.view
 	songNum = composer.getVariable("songNum")
@@ -169,8 +174,9 @@ function scene:create(event)
 
 	soundOptions = 
 	{
-		channel = 1,
-		duration = map.length
+		channel = 2,
+		duration = map.length,
+		onComplete = moveToGameOver
 	}
 
 	physics.setGravity( 0, 0 )
@@ -203,7 +209,7 @@ local songNum = 0;
 function scene:show(event)
 	local sceneGroup = self.view
 	if(event.phase == "will") then
-		audio.setVolume(0.5)
+		
 		audio.play(sound, soundOptions )
 		timer.performWithDelay( 200, beginIndicator, 1 )
 		
