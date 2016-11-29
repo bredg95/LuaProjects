@@ -169,25 +169,7 @@ function moveToGameOver()
 		composer.removeScene("gameView")
 		composer.gotoScene("gameOver")
 	end
-		-- local HitOverMiss = hit/miss
-		--math.round(HitOverMiss*10)*0.1
-		-- print("HitOverMiss = ",HitOverMiss)
-		-- hitOverMiss = math.round(HitOverMiss*10)*0.1
-		-- myText1.alpha = 1
-		-- myText2.alpha = 1
-		-- myText3.alpha = 1
-		-- myText4.alpha = 1
-		-- myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-		-- myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
-		-- myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
-		-- myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
 
-		-- myText1:setFillColor( 1, 1, 1 )
-		-- myText2:setFillColor( 1, 1, 1 )
-		-- myText3:setFillColor( 1, 1, 1 )
-		-- myText4:setFillColor( 1, 1, 1 )
-
-		-- backButton.alpha = 1
 end
 
 local function backButtonClicked ( event )
