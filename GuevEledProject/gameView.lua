@@ -11,7 +11,7 @@ _W = display.contentWidth
 _H = display.contentHeight
 
 local map = require("songs")
-local indicatorGroup, indicatorCircle, sound, soundOptions;
+local indicatorGroup, indicatorCircle, sound, soundOption, backButton;
 
 physics.start()
 audio.setVolume(0.1)
@@ -195,6 +195,7 @@ function scene:create(event)
 	sceneGroup:insert(topBar)
 	sceneGroup:insert(missScore)
 	sceneGroup:insert(hitScore)
+	sceneGroup:insert(backButton)
 
 	--sceneGroup:insert(indicatorBG)
 end
@@ -472,7 +473,7 @@ local function backButtonClicked ( event )
 	end
 end
 
-local backButton = widget.newButton( 
+backButton = widget.newButton( 
 {
 	x = _W/2,
 	y = _H/2 + 260,
