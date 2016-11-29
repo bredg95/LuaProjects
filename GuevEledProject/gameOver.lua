@@ -8,16 +8,16 @@ _H = display.contentHeight
 
 
 
-local myText1 = display.newText( "Game Over", 100, 150, native.systemFont, 16 )
+local myText1 = display.newText( "Game Over", _W/2, 150, native.systemFont, 16 )
 myText1:setFillColor( 1, 1, 1 )
 
-local myText2 = display.newText( "Score: "..composer.getVariable( "hitTotal" ), 100, 200, native.systemFont, 16 )
+local myText2 = display.newText( "Score: "..composer.getVariable( "hitTotal" ),  _W/2, 200, native.systemFont, 16 )
 myText2:setFillColor( 1, 1, 1 )
-local myText3 = display.newText( "missTotal: "..composer.getVariable( "missTotal" ), 100, 250, native.systemFont, 16 )
+local myText3 = display.newText( "missTotal: "..composer.getVariable( "missTotal" ),  _W/2, 250, native.systemFont, 16 )
 myText3:setFillColor( 1, 1, 1 )
-local myText4 = display.newText( "totalBeats: "..composer.getVariable( "totalBeats" ), 100, 300, native.systemFont, 16 )
+local myText4 = display.newText( "totalBeats: "..composer.getVariable( "totalBeats" ),  _W/2, 300, native.systemFont, 16 )
 myText3:setFillColor( 1, 1, 1 )
-local myText5 = display.newText( "totalScore: "..composer.getVariable( "totalScore" ), 100, 350, native.systemFont, 16 )
+local myText5 = display.newText( "totalScore: "..composer.getVariable( "totalScore" ),  _W/2, 350, native.systemFont, 16 )
 myText5:setFillColor( 1, 1, 1 )
 
 
