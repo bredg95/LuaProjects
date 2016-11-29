@@ -160,7 +160,25 @@ gameBox.tap = boxTapped
 gameBox:addEventListener( "tap", gameBox )
 
 function moveToGameOver() 
+		local HitOverMiss = hit/miss
+		--math.round(HitOverMiss*10)*0.1
+		print("HitOverMiss = ",HitOverMiss)
+		hitOverMiss = math.round(HitOverMiss*10)*0.1
+		myText1.alpha = 1
+		myText2.alpha = 1
+		myText3.alpha = 1
+		myText4.alpha = 1
+		myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
+		myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
+		myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
+		myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
 
+		myText1:setFillColor( 1, 1, 1 )
+		myText2:setFillColor( 1, 1, 1 )
+		myText3:setFillColor( 1, 1, 1 )
+		myText4:setFillColor( 1, 1, 1 )
+
+		backButton.alpha = 1
 end
 
 function scene:create(event)
@@ -195,6 +213,10 @@ function scene:create(event)
 	sceneGroup:insert(topBar)
 	sceneGroup:insert(missScore)
 	sceneGroup:insert(hitScore)
+	sceneGroup:insert(myText1)
+	sceneGroup:insert(myText2)
+	sceneGroup:insert(myText3)
+	sceneGroup:insert(myText4)
 
 	--sceneGroup:insert(indicatorBG)
 end
@@ -455,7 +477,7 @@ local function backButtonClicked ( event )
 
 		scene:destroy()
 		audio.stop()
-		myText1.text = ""		
+		myText1.text = ""
 		myText2.text = ""
 		myText3.text = ""
 		myText4.text = ""
@@ -532,25 +554,7 @@ function onTimer( event )
 	if(tapTime > 179000) then
 		--composer.removeScene("gameView")
 		--composer.gotoScene("gameOver")
-		local HitOverMiss = hit/miss
-		--math.round(HitOverMiss*10)*0.1
-		print("HitOverMiss = ",HitOverMiss)
-		hitOverMiss = math.round(HitOverMiss*10)*0.1
-		myText1.alpha = 1
-		myText2.alpha = 1
-		myText3.alpha = 1
-		myText4.alpha = 1
-		myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-		myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
-		myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
-		myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
-
-		myText1:setFillColor( 1, 1, 1 )
-		myText2:setFillColor( 1, 1, 1 )
-		myText3:setFillColor( 1, 1, 1 )
-		myText4:setFillColor( 1, 1, 1 )
-
-		backButton.alpha = 1
+		
 		
 	end
 
