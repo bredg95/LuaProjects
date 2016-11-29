@@ -14,16 +14,35 @@ local map = require("songs")
 local indicatorGroup, indicatorCircle, sound, soundOption;
 
 physics.start()
-audio.setVolume(0.1)
+
+if(composer.getVariable("volume") ~= nil) then
+	print(composer.getVariable("volume"))
+	audio.setVolume(composer.getVariable("volume"))
+else
+	audio.setVolume(0.5)
+end
 physics.setGravity( 0, 600 )
 
+local startTime = 0;
 
+local missScore = display.newText("Miss: ", 10, _H-20, native.systemFont, 20 )
+local hitScore = display.newText("Hit: ", 100, _H -20, native.systemFont, 20 )
+
+missScore.anchorX = 0
+hitScore.anchorX = 0
+local miss = 0
+local hit = 0
+
+-- Function used to round numbers based on the number of decimal places (idp)
+function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+-- Used to prevent objects from disrupting the indicator bar
 local topBar = display.newRect(0,25,_W+400,5)
 physics.addBody(topBar, "static")
 
--- local indicatorBG = display.newRect(0,0,_W,20)
--- 	indicatorBG.anchorX = 0
--- 	indicatorBG.anchorY = 0
 
 local testParticleSystem = physics.newParticleSystem(
   {
@@ -33,14 +52,6 @@ local testParticleSystem = physics.newParticleSystem(
   }
 )
 
-local myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-myText1.alpha = 0
-local myText2 = display.newText( "Score: ", 100, 230, native.systemFont, 16 )
-myText2.alpha = 0
-local myText3 = display.newText( "HitOverMiss: ", 100, 260, native.systemFont, 16 )
-myText3.alpha = 0
-local myText4 = display.newText( "Score: ", 100, 290, native.systemFont, 16 )
-myText4.alpha = 0
 
 local function onTapped( event )
 
@@ -56,24 +67,6 @@ local function onTapped( event )
       }
     )
     end
-
-
-
-local startTime = 0;
-local beatTable = {};
-
-local missScore = display.newText("Miss: ", 10, _H-20, native.systemFont, 20 )
-local hitScore = display.newText("Hit: ", 100, _H -20, native.systemFont, 20 )
-local totalNumberPossibleHits = 0
-missScore.anchorX = 0
-hitScore.anchorX = 0
-local miss = 0
-local hit = 0
-function round(num, idp)
-  local mult = 10^(idp or 0)
-  return math.floor(num * mult + 0.5) / mult
-end
-
 
 
 local counter = 0
@@ -102,12 +95,13 @@ doubleRects2.alpha = 0
 
 function boxTapped (object, event)
 	local tapTime = system.getTimer()
+	
 	local hitTime = round((tapTime - startTime)/(map.quarterBeat/map.beatDivisor))
-	print(hitTime)
-	print("taptTime: ", tapTime)
+	print("hit:" ..hitTime)
 
 	onTapped()
-
+	-- Need to offset taptime by the time the song started
+	tapTime = tapTime - startTime;
 	if(tapTime < 33000) then
 		morphBasic()
 	elseif(tapTime >= 33000 and tapTime < 52000) then
@@ -130,10 +124,6 @@ function boxTapped (object, event)
 		morph5()
 	end
 	counter = counter + 1
-
-
-	--print("\n\n\n\n\n\n\nmap.beatTable.length: ",map.beatTable[i])
-
 
 	if(map.beatTable[hitTime] ) then
 		hit = hit + 1
@@ -169,109 +159,7 @@ function moveToGameOver()
 		composer.removeScene("gameView")
 		composer.gotoScene("gameOver")
 	end
-		-- local HitOverMiss = hit/miss
-		--math.round(HitOverMiss*10)*0.1
-		-- print("HitOverMiss = ",HitOverMiss)
-		-- hitOverMiss = math.round(HitOverMiss*10)*0.1
-		-- myText1.alpha = 1
-		-- myText2.alpha = 1
-		-- myText3.alpha = 1
-		-- myText4.alpha = 1
-		-- myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-		-- myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
-		-- myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
-		-- myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
-
-		-- myText1:setFillColor( 1, 1, 1 )
-		-- myText2:setFillColor( 1, 1, 1 )
-		-- myText3:setFillColor( 1, 1, 1 )
-		-- myText4:setFillColor( 1, 1, 1 )
-
-		-- backButton.alpha = 1
 end
-
-local function backButtonClicked ( event )
-	if(event.phase == "ended") then
-		backButtonPressed = true;
-		audio.stop()
-		composer.removeScene("gameView")
-		composer.gotoScene( "mainMenu")
-	end
-end
-
-local backButton = widget.newButton( 
-{
-	x = _W/2,
-	y = _H/2 + 260,
-	id = "backButton",
-	label = "Back",
-	labelColor = {default ={0,0,0}, over = {0,0,0}},
-	textOnly = false,
-	shape = "square",
-	fillColor = {default = {1,1,1,0.7}, over={1,0.2,0.5,1}},
-	onEvent = backButtonClicked
-
-} )
-
-function scene:create(event)
-	local sceneGroup = self.view
-	songNum = composer.getVariable("songNum")
-	map:setSong(songNum)
-	indicatorGroup = map:setupIndicatorBar()
-	sound = audio.loadStream(map.songFile)
-
-	--print("\n\n\n\n\n\n\ntotalNumberPossibleHits", map.length)
-
-	soundOptions = 
-	{
-		channel = 2,
-		duration = 2000,--map.length,
-		onComplete = moveToGameOver
-	}
-
-	physics.setGravity( 0, 0 )
-	physics.addBody( indicatorGroup, "dynamic")
-	indicatorGroup.isSensor = true
-	 
-	indicatorGroup.x = 20 
-
-	indicatorCircle = display.newCircle(20, 10, 10 )
-	indicatorCircle.anchorX = 0
-	indicatorCircle:setFillColor( 0,1,0, 0.5)
-	sceneGroup:insert(indicatorGroup)
-	sceneGroup:insert(testParticleSystem)
-	sceneGroup:insert(indicatorCircle)
-	sceneGroup:insert(gameBox)
-	sceneGroup:insert(topBar)
-	sceneGroup:insert(missScore)
-	sceneGroup:insert(hitScore)
-	sceneGroup:insert(backButton)
-	sceneGroup:insert(myText1)
-	sceneGroup:insert(myText2)
-	sceneGroup:insert(myText3)
-	sceneGroup:insert(myText4)
-
-	--sceneGroup:insert(indicatorBG)
-end
-
-local function beginIndicator()
-	indicatorGroup:setLinearVelocity( -map.pixPerSec, 0 )
-	startTime = system.getTimer()
-end
-
-local songNum = 0;
-
-function scene:show(event)
-	local sceneGroup = self.view
-	if(event.phase == "will") then
-		
-		audio.play(sound, soundOptions )
-		timer.performWithDelay( 200, beginIndicator, 1 )
-		
-		--timer.performWithDelay( map.length, function)
-	end
-end
-
 
 -- Graphic Effect 1
 
@@ -410,11 +298,6 @@ function morph4( event )
 	
 end
 
-
-
-
-
-
 function morphBasic2( event )
 	print("morphBasic2")
 	counter = counter + 1
@@ -432,13 +315,6 @@ function morphBasic2( event )
 	transition.to( gameBox.path, { time=500 , width=200, height=200, radius=220,onComplete=listener1 } )
 	transition.to( gameBox.path, { time=100 , width=100, height=100, radius=20,onComplete=listener1 } )
 end
-
-
-
-
-
-
-
 
 local x = 50
 local x2 = 50
@@ -553,15 +429,106 @@ end
 timer.performWithDelay( 100, onTimer, 0 )
 --timer.performWithDelay(1000,onTimer2,0)
 
+local function backButtonClicked ( event )
+	if(event.phase == "ended") then
+		backButtonPressed = true;
+		audio.stop()
+		for i=1,#rects do
+			rects[i]:removeSelf();
+		end
+		composer.removeScene("gameView")
+		composer.gotoScene( "mainMenu")
+	end
+end
 
+local backButton = widget.newButton( 
+{
+	x = _W/2,
+	y = _H/2 + 260,
+	id = "backButton",
+	label = "Back",
+	labelColor = {default ={0,0,0}, over = {0,0,0}},
+	textOnly = false,
+	shape = "square",
+	fillColor = {default = {1,1,1,0.7}, over={1,0.2,0.5,1}},
+	onEvent = backButtonClicked
 
+} )
+
+function scene:create(event)
+	local sceneGroup = self.view
+	songNum = composer.getVariable("songNum")
+	map:setSong(songNum)
+	indicatorGroup = map:setupIndicatorBar()
+	sound = audio.loadStream(map.songFile)
+
+	--print("\n\n\n\n\n\n\ntotalNumberPossibleHits", map.length)
+
+	soundOptions = 
+	{
+		channel = 2,
+		duration = map.length,
+		onComplete = moveToGameOver
+	}
+
+	physics.setGravity( 0, 0 )
+	physics.addBody( indicatorGroup, "dynamic")
+	indicatorGroup.isSensor = true
+	 
+	indicatorGroup.x = 20 
+
+	indicatorCircle = display.newCircle(20, 10, 10 )
+	indicatorCircle.anchorX = 0
+	indicatorCircle:setFillColor( 0,1,0, 0.5)
+	sceneGroup:insert(indicatorGroup)
+	sceneGroup:insert(testParticleSystem)
+	sceneGroup:insert(indicatorCircle)
+	sceneGroup:insert(gameBox)
+	sceneGroup:insert(doubleRects1)
+	sceneGroup:insert(doubleRects2)
+	sceneGroup:insert(topBar)
+	sceneGroup:insert(missScore)
+	sceneGroup:insert(hitScore)
+	sceneGroup:insert(backButton)
+	sceneGroup:insert(square1)
+	sceneGroup:insert(square2)
+	sceneGroup:insert(square3)
+	sceneGroup:insert(square4)
+	sceneGroup:insert(square5)
+	sceneGroup:insert(square6)
+	sceneGroup:insert(square7)
+	sceneGroup:insert(square8)
+	--sceneGroup:insert(indicatorBG)
+end
+
+local function beginIndicator()
+	indicatorGroup:setLinearVelocity( -map.pixPerSec, 0 )
+	startTime = system.getTimer()
+	print("startTime:"..startTime)
+end
+
+local songNum = 0;
+
+function scene:show(event)
+	local sceneGroup = self.view
+	if(event.phase == "will") then
+		
+		audio.play(sound, soundOptions )
+		timer.performWithDelay( 200, beginIndicator, 1 )
+		
+		--timer.performWithDelay( map.length, function)
+	end
+end
 
 
 function scene:hide(event)
 	local sceneGroup = self.view
 	local phase = event.phase
 	if(phase == "will" ) then
-		
+		counter = 0
+		doubleCounter = 0
+		morphWithSpinsCounter = 0
+		morphWithSpinsDoubleCounter = 0
 	end
 end
 
