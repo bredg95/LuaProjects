@@ -63,10 +63,12 @@ function scene:show(event)
 			onEvent = song2Clicked
 
 		} )
+	local title = display.newText( "Song Selection", _W/2, 100, native.systemFont, 16 )
 		-- minTime = composer.getVariable("minPauseTime")
 		-- maxTime = composer.getVariable("maxPauseTime")
 	sceneGroup:insert(song1Button)
 	sceneGroup:insert(song2Button)
+	sceneGroup:insert(title)
 end
 function scene:destroy(event)
 	local sceneGroup = self.view

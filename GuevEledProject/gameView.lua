@@ -11,7 +11,7 @@ _W = display.contentWidth
 _H = display.contentHeight
 
 local map = require("songs")
-local indicatorGroup, indicatorCircle, sound, soundOption, backButton;
+local indicatorGroup, indicatorCircle, sound, soundOption;
 
 physics.start()
 audio.setVolume(0.1)
@@ -158,28 +158,60 @@ end
 gameBox.tap = boxTapped
 
 gameBox:addEventListener( "tap", gameBox )
+local backButtonPressed = false
 
 function moveToGameOver() 
-		local HitOverMiss = hit/miss
+	if(backButtonPressed ~= true) then
+		composer.setVariable("hitTotal", hit)
+		composer.setVariable("missTotal", miss)
+		composer.setVariable("totalBeats", #map.timeTable)
+		composer.setVariable("totalScore", (hit-miss)/#map.timeTable)
+		composer.removeScene("gameView")
+		composer.gotoScene("gameOver")
+	end
+		-- local HitOverMiss = hit/miss
 		--math.round(HitOverMiss*10)*0.1
-		print("HitOverMiss = ",HitOverMiss)
-		hitOverMiss = math.round(HitOverMiss*10)*0.1
-		myText1.alpha = 1
-		myText2.alpha = 1
-		myText3.alpha = 1
-		myText4.alpha = 1
-		myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-		myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
-		myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
-		myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
+		-- print("HitOverMiss = ",HitOverMiss)
+		-- hitOverMiss = math.round(HitOverMiss*10)*0.1
+		-- myText1.alpha = 1
+		-- myText2.alpha = 1
+		-- myText3.alpha = 1
+		-- myText4.alpha = 1
+		-- myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
+		-- myText2 = display.newText( "Score: "..hitScore.text, 100, 230, native.systemFont, 16 )
+		-- myText3 = display.newText( "HitOverMiss: "..HitOverMiss, 100, 260, native.systemFont, 16 )
+		-- myText4 = display.newText( "Score: "..missScore.text, 100, 290, native.systemFont, 16 )
 
-		myText1:setFillColor( 1, 1, 1 )
-		myText2:setFillColor( 1, 1, 1 )
-		myText3:setFillColor( 1, 1, 1 )
-		myText4:setFillColor( 1, 1, 1 )
+		-- myText1:setFillColor( 1, 1, 1 )
+		-- myText2:setFillColor( 1, 1, 1 )
+		-- myText3:setFillColor( 1, 1, 1 )
+		-- myText4:setFillColor( 1, 1, 1 )
 
-		backButton.alpha = 1
+		-- backButton.alpha = 1
 end
+
+local function backButtonClicked ( event )
+	if(event.phase == "ended") then
+		backButtonPressed = true;
+		audio.stop()
+		composer.removeScene("gameView")
+		composer.gotoScene( "mainMenu")
+	end
+end
+
+local backButton = widget.newButton( 
+{
+	x = _W/2,
+	y = _H/2 + 260,
+	id = "backButton",
+	label = "Back",
+	labelColor = {default ={0,0,0}, over = {0,0,0}},
+	textOnly = false,
+	shape = "square",
+	fillColor = {default = {1,1,1,0.7}, over={1,0.2,0.5,1}},
+	onEvent = backButtonClicked
+
+} )
 
 function scene:create(event)
 	local sceneGroup = self.view
@@ -193,7 +225,7 @@ function scene:create(event)
 	soundOptions = 
 	{
 		channel = 2,
-		duration = map.length,
+		duration = 2000,--map.length,
 		onComplete = moveToGameOver
 	}
 
@@ -458,8 +490,6 @@ end
 
 
 
-
-
 function morph5( event )
 	-- body
 	doubleRects1.alpha = 1
@@ -467,47 +497,6 @@ function morph5( event )
 	transition.to( doubleRects1, { time=300, alpha = 0 , onComplete=listener1 } )
 	transition.to( doubleRects2, { time=300, alpha = 0 , onComplete=listener1 } )
 end
-
-
-
-
-
-local function backButtonClicked ( event )
-	if(event.phase == "ended") then
-		print("clicked")
-
-		scene:destroy()
-		audio.stop()
-		myText1.text = ""
-		myText2.text = ""
-		myText3.text = ""
-		myText4.text = ""
-
-		myText1.alpha = 0
-		myText2.alpha = 0
-		myText3.alpha = 0
-		myText4.alpha = 0
-
-		hitScore.text = ""
-		missScore.text = ""
-		composer.removeScene("gameView")
-		composer.gotoScene( "mainMenu")
-	end
-end
-
-backButton = widget.newButton( 
-{
-	x = _W/2,
-	y = _H/2 + 260,
-	id = "backButton",
-	label = "Back",
-	labelColor = {default ={0,0,0}, over = {0,0,0}},
-	textOnly = false,
-	shape = "square",
-	fillColor = {default = {1,1,1,0.7}, over={1,0.2,0.5,1}},
-	onEvent = backButtonClicked
-
-} )
 
 function onTimer( event )
 

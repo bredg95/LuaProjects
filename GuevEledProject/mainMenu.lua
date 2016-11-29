@@ -5,6 +5,8 @@ local widget = require("widget")
 _W = display.contentWidth
 _H = display.contentHeight
 
+
+
 -- Start Button click event
 local function startButtonClicked ( event )
 	if(event.phase == "ended") then
@@ -59,10 +61,12 @@ function scene:show(event)
 			onEvent = settingsButtonClicked
 
 		} )
+	local title = display.newText( "Brosu!\nBy: Garrett Eledui\nBranden Guevara", _W/2, 50, native.systemFont, 16 )
 		-- minTime = composer.getVariable("minPauseTime")
 		-- maxTime = composer.getVariable("maxPauseTime")
 	sceneGroup:insert(startButton)
 	sceneGroup:insert(settingsButton)
+	sceneGroup:insert(title)
 end
 function scene:destroy(event)
 	local sceneGroup = self.view

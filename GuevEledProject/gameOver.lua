@@ -9,10 +9,10 @@ _H = display.contentHeight
 
 
 local myText1 = display.newText( "Game Over", 100, 200, native.systemFont, 16 )
-myText:setFillColor( 1, 1, 1 )
+myText1:setFillColor( 1, 1, 1 )
 
 local myText2 = display.newText( "Score: ", 100, 200, native.systemFont, 16 )
-myText:setFillColor( 1, 1, 1 )
+myText2:setFillColor( 1, 1, 1 )
 
 
 function scene:create(event)
@@ -40,20 +40,8 @@ end
 -- Back button click event
 local function backButtonClicked ( event )
 	if(event.phase == "ended") then
-		print("clicked")
-		local range = maxValue - minValue;
-		-- calculates values using slider's percent values
-		local minval = minValue + range*minPercent/100
-		local maxval = minValue + range*maxPercent/100
-
-		if(minval > maxval) then
-			--throw error
-
-			local alert = native.showAlert( "Error", "Min Value is greater than Max value", { "OK" }, onComplete )
-		else
-			composer.removeScene("gameOver")
-			composer.gotoScene( "mainMenu")
-		end
+		composer.removeScene("gameOver")
+		composer.gotoScene( "mainMenu")
 	end
 end
 

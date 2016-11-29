@@ -6,29 +6,25 @@ local widget = require("widget")
 _W = display.contentWidth
 _H = display.contentHeight
 
--- Holds the min/max interval values
-local minValue = 500
-local maxValue = 5000
--- Holds the min/max percents for use in the sliders
-local minPercent = 0
-local maxPercent = 100
+local maxVolume = 1
+local volPercent = 50
 
--- Both labels will be updated based on sliders
-local minLabel = display.newText(  "500", _W/2, _H/4 - 25, native.systemFont , 15 )
-minLabel.anchorX = 0
-local maxLabel = display.newText(  "5000", _W/2, _H/4 + 75, native.systemFont , 15 )
-maxLabel.anchorX = 0
+-- Volume label will be updated based on sliders
+local volLabel = display.newText(  "1", _W/2, _H/4 - 25, native.systemFont , 15 )
+volLabel.anchorX = 0
+-- local maxLabel = display.newText(  "5000", _W/2, _H/4 + 75, native.systemFont , 15 )
+-- maxLabel.anchorX = 0
 
---Listener event for min slider
-local function minSliderListener( event )
+--Listener event for volume slider
+local function volSliderListener( event )
 	minPercent = event.value
-	minLabel.text = minValue + (maxValue - minValue)*minPercent/100
+	minLabel.text = maxValue*minPercent/100
 end
---Listener event for max slider
-local function maxSliderListener( event )
-	maxPercent = event.value
-	maxLabel.text = minValue + (maxValue - minValue)*maxPercent/100
-end
+-- --Listener event for max slider
+-- local function maxSliderListener( event )
+-- 	maxPercent = event.value
+-- 	maxLabel.text = minValue + (maxValue - minValue)*maxPercent/100
+-- end
 
 local label1 = display.newText(  "Minimum Value (ms): ", _W/2, _H/4 - 25, native.systemFont , 15 )
 label1.anchorX = 1
