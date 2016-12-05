@@ -10,17 +10,19 @@ local player = 0; -- swap between 0 and 1
 game.myMove = false;
 
 -- game board display layout
-local zone = display.newRect (display.contentCenterX, display.contentCenterY, 450,450);
+--local zone = display.newRect (display.contentCenterX, display.contentCenterY, 450,450);
+local zone = display.newRect (display.contentCenterX, display.contentCenterY, 300,300);
 zone.strokeWidth = 2;
 zone:setFillColor(0,0.2,0);
 physics.addBody ( zone, "static");
 zone.isSensor = true;
-
-local ver = display.newRect (display.contentCenterX, display.contentCenterY, 150,450);
+--local ver = display.newRect (display.contentCenterX, display.contentCenterY, 150,450);
+local ver = display.newRect (display.contentCenterX, display.contentCenterY, 105,300);
 ver:setFillColor(0,0,0,0);
 ver.strokeWidth = 2; 
 
-local hor = display.newRect (display.contentCenterX, display.contentCenterY, 450,150);
+--local hor = display.newRect (display.contentCenterX, display.contentCenterY, 450,150);
+local hor = display.newRect (display.contentCenterX, display.contentCenterY, 300,105);
 hor:setFillColor(0,0,1,0);
 hor.strokeWidth = 2; 
 
