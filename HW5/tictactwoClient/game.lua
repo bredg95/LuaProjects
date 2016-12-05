@@ -53,6 +53,8 @@ local function zoneHandler(event)
    local x, y = event.target:contentToLocal(event.x, event.y);
    x = x + 225;  -- conversion
    y = y + 225;  -- conversion
+   --x = x + 1;  -- conversion
+   --y = y + 1;  -- conversion
    x = math.ceil( x/150 );
    y = math.ceil( y/150 );
 	
@@ -79,9 +81,16 @@ function game.mark (x,y)
   -- mark the game board (logical)
   print(player)
   board[x][y] = player; 
+  print("x = ",x)
+  print("y = ",y)
   --place the piece on the board (visual)
   local _x, _y = 
-   zone:localToContent(75+150*(x-1) - 225, 75+150*(y-1) - 225);
+  --zone:localToContent(75+150*(x-1) - 225, 75+150*(y-1) - 225);
+  zone:localToContent(75+100*(x-1) - 175, 75+100*(y-1) - 175);
+
+  print(" New x = ",x)
+  print(" New y = ",y)
+
   piece:new(player, _x, _y);	
   player = (player + 1) % 2;
 

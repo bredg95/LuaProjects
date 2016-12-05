@@ -84,7 +84,8 @@ function game.mark (x,y)
   board[x][y] = player; 
   --place the piece on the board (visual)
   local _x, _y = 
-   zone:localToContent(75+150*(x-1) - 225, 75+150*(y-1) - 225);
+   --zone:localToContent(75+150*(x-1) - 225, 75+150*(y-1) - 225);
+   zone:localToContent(75+100*(x-1) - 175, 75+100*(y-1) - 175);
   piece:new(player, _x, _y);	
   player = (player + 1) % 2;
 
