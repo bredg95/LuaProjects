@@ -470,6 +470,9 @@ function scene:create(event)
 		duration = map.length,
 		onComplete = moveToGameOver
 	}
+	if(map.songFile == "song_AmeMichi.mp3") then
+		soundOptions.duration = 10000
+	end
 
 	physics.setGravity( 0, 0 )
 	physics.addBody( indicatorGroup, "dynamic")
