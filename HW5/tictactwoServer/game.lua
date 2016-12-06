@@ -37,10 +37,38 @@ function checkWin()
       display.newText(winner, 100, 200, native.systemFont, 40);
      end
    end
-
    --check rows
+   for i=1, 3 do
+    if (board[1][i] == board[2][i] and 
+        board[1][i] == board[3][i] and 
+        board[1][i] ~= -1) then
+      local winner = tostring(board[i][1]).." wins!";   
+      display.newText(winner, 100, 200, native.systemFont, 40);
+     end
+   end
 
    --check diagonals
+
+   for i=1, 3 do
+    if (board[1][1] == board[2][2] and 
+        board[2][2] == board[3][3] and 
+        board[1][i] ~= -1) then
+      local winner = tostring(board[2][2]).." wins!";   
+      display.newText(winner, 100, 200, native.systemFont, 40);
+    end
+  end
+  for i=1, 3 do
+    if (board[1][3] == board[2][2] and 
+        board[2][2] == board[3][1] and 
+        board[1][i] ~= -1) then
+      local winner = tostring(board[2][2]).." wins!";   
+      display.newText(winner, 100, 200, native.systemFont, 40);
+    end
+  end
+
+
+
+
      
 end
 
