@@ -6,6 +6,7 @@ other operations such as moving the GUI around or printing statements.
 
 local socket = require("socket")
 local game = require( "game" );
+local widget = require("widget");
 
 -- GameTimer will hold the id of the timer that will poll for messages
 local gameTimer
@@ -14,8 +15,8 @@ local gameTimer
 local ip = "localhost";
 client = socket.connect(ip,20140);
 --client = socket.connect(ip,20100);
-local cip, cport = client:getpeername();
-print ("connected to host at:", cip, ":", cport);
+-- local cip, cport = client:getpeername();
+-- print ("connected to host at:", cip, ":", cport);
 
 
 
@@ -38,6 +39,11 @@ function waitForMove()
   client:settimeout(0)
   local line, err = client:receive();
   if not err then 
+    if(line == "reset") then
+      print("reset pls")
+       game:restart()
+       return;
+    end
     local x=tonumber(string.sub(line,1,1));
     local y=tonumber(string.sub(line,3,3));
     print ("Got:",x,y);
@@ -53,6 +59,12 @@ end
 
 
 local function gameStart (event)
+  -- if not client then
+  --   client = socket.connect(ip,20140);
+  --   if not client then
+  --     return
+  --   end
+  -- end
   buttons:removeSelf();  -- remove the buttons
   buttons=nil;
 
@@ -77,12 +89,40 @@ local function sendMove(event)
   if not game.myMove then
     return
   end
+  if(game.reset) then
+    local sent, msg = client:send("reset");
+    return;
+  end
   print("I made my move at:", event.x, event.y);
   local sent, msg =   client:send(event.x..","..event.y.."\r\n");
   -- Since it sent its move it now has to wait for the next move
   game.myMove = false
   gameTimer = timer.performWithDelay( 200, waitForMove , 0) 
 end
+
+local function restartButtonClicked ( event )
+  if not game.myMove then
+    return;
+  end 
+  game:restart();
+  local sent, msg = client:send("reset\r\n");
+end
+
+local restartButton = widget.newButton( {
+      x = 200,
+      y = 0,
+      width = 100,
+      id = "restartButton",
+      label = "Restart",
+      labelColor = {default ={1,1,1}, over = {0,0,0}},
+      textOnly = false,
+      shape = "roundedRect",
+      fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+      onEvent = restartButtonClicked
+
+    } )
+restartButton.anchorX = 0
+restartButton.anchorY = 0
 
 Runtime:addEventListener("moved", sendMove);
 

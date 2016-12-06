@@ -3,12 +3,14 @@
 local game = {};
 local piece = require( "piece" );
 local physics = require("physics");
+
 physics.start();  physics.setDrawMode ("normal");
 physics.setGravity (0,0);
 
 -- game board logical struct = 3x3 matrix
 local board = {{-1,-1,-1},{-1,-1,-1},{-1,-1,-1}};
 local player = 0; -- swap between 0 and 1
+local pieces = {};
 game.myMove = true;
 
 -- game board display layout
@@ -28,6 +30,27 @@ ver.strokeWidth = 2;
 local hor = display.newRect (display.contentCenterX, display.contentCenterY, 300,105);
 hor:setFillColor(0,0,1,0);
 hor.strokeWidth = 2; 
+
+function game:restart (  )
+  board = {{-1,-1,-1},{-1,-1,-1},{-1,-1,-1}};
+  for key,v in pairs(pieces) do
+     display.remove(pieces[key].shape)
+  end
+end
+-- local restartButton = widget.newButton( {
+--       x = 200,
+--       y = 0,
+--       id = "restartButton",
+--       label = "Restart",
+--       labelColor = {default ={1,1,1}, over = {0,0,0}},
+--       textOnly = false,
+--       shape = "roundedRect",
+--       fillColor = {default = {0,0,2,0.7}, over={1,0.2,0.5,1}},
+--       onEvent = game.restartButtonClicked
+
+--     } )
+-- restartButton.anchorX = 0
+-- restartButton.anchorY = 0
 
 function checkWin() 
   --check columns
@@ -116,7 +139,7 @@ function game.mark (x,y)
   local _x, _y = 
    --zone:localToContent(75+150*(x-1) - 225, 75+150*(y-1) - 225);
    zone:localToContent(75+100*(x-1) - 175, 75+100*(y-1) - 175);
-  piece:new(player, _x, _y);	
+  table.insert(pieces, piece:new(player, _x, _y));  --piece:new(player, _x, _y);	
   player = (player + 1) % 2;
 
   return true;
