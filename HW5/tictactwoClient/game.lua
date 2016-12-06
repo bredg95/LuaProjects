@@ -1,3 +1,5 @@
+-- We added a game.mymove to indicate when its not this instances time to place a move
+-- Also adjusted the graphics to fit the phone screen
 local game = {};
 local piece = require( "piece" );
 local physics = require("physics");
