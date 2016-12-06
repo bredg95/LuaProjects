@@ -7,6 +7,7 @@ local gameTimer
 -- connect to a TCP server
 local ip = "localhost";
 client = socket.connect(ip,20140);
+--client = socket.connect(ip,20100);
 local cip, cport = client:getpeername();
 print ("connected to host at:", cip, ":", cport);
 

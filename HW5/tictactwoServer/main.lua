@@ -5,6 +5,7 @@ local game = require( "game" );
 
 
 local server = socket.bind("*", 20140);
+--local server = socket.bind("*", 20100);
 -- Wait for connection from client
 client = server:accept();
 local cip, cport = client:getpeername();
